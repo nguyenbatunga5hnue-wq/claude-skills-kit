@@ -5,6 +5,8 @@ an installer for third-party skills and plugins, and the motion library stack.
 
 ## Quick start
 
+For a new project, see `SETUP-PROMPT.md`: a full inventory plus a message to paste into a new session.
+
 In any Claude Code session (cloud or local):
 
 ```bash
