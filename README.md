@@ -16,6 +16,12 @@ git clone https://github.com/<you>/claude-skills-kit.git ~/claude-skills-kit
 
 Then restart Claude Code or open a new session.
 
+**Cloud sessions:** select this repo when starting a session. The SessionStart hook
+(`.claude/hooks/session-start.sh`, registered in `.claude/settings.json`) runs
+`install.sh` into `~/.claude` automatically. It runs only in cloud sessions
+(`CLAUDE_CODE_REMOTE=true`), skips when the same kit version is already installed, and
+logs to `~/.claude/claude-skills-kit-install.log`.
+
 Options:
 
 | Command | Effect |

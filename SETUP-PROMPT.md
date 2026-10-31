@@ -1,26 +1,36 @@
 # Bộ skill Claude Code của tôi: tổng hợp và lời nhắn cài đặt
 
-Khi bắt đầu dự án mới: mở session Claude Code, **đính kèm file `claude-skills-kit.tar.gz`**,
-rồi dán nguyên khối "Lời nhắn để dán" bên dưới.
-(Nếu bộ kit đã có trên GitHub, bỏ file đính kèm và thay bước 1 bằng `git clone <url repo>`.)
+Repo: https://github.com/nguyenbatunga5hnue-wq/claude-skills-kit (private)
 
----
+## Cách 1: chọn repo khi mở session (tự động, không cần dán gì)
 
-## Lời nhắn để dán
+Khi tạo session Claude Code trên web, chọn thêm repo `claude-skills-kit`.
+Hook `.claude/hooks/session-start.sh` tự chạy `install.sh` lúc session khởi động
+(khoảng 20–30 giây lần đầu, gần như tức thì các lần sau) và cài 62 skill + 19 plugin
+vào `~/.claude`, dùng được cho mọi repo khác trong cùng session.
+
+## Cách 2: dán lời nhắn vào session đang mở
 
 ```text
 Cài bộ skill Claude Code của tôi cho dự án này:
 
-1. Giải nén file claude-skills-kit.tar.gz tôi vừa đính kèm vào ~/claude-skills-kit
-   (nếu không thấy file, hỏi tôi, đừng tự tạo lại nội dung).
+1. Clone https://github.com/nguyenbatunga5hnue-wq/claude-skills-kit vào ~/claude-skills-kit
+   (repo private: nếu không clone được, dùng add_repo để gắn repo này rồi thử lại;
+   nếu vẫn không được, hỏi tôi, đừng tự tạo lại nội dung).
 2. Đọc ~/claude-skills-kit/install.sh trước khi chạy, rồi chạy:
      bash ~/claude-skills-kit/install.sh --project .
-   Lệnh này cài skill vào .claude/skills/ của dự án này (thêm --libs . nếu dự án cần
-   thư viện animation/3D/video; bỏ --project . nếu muốn cài cho mọi dự án).
-   Script tải skill bên thứ ba ở đúng commit đã kiểm tra; không dùng --latest.
+   (thêm --libs . nếu dự án cần thư viện animation/3D/video; bỏ --project . để cài
+   cho mọi dự án; không dùng --latest).
 3. Không ghi đè file nào của dự án ngoài các thư mục skill cùng tên.
 4. Báo lại: số skill đã cài, plugin nào cài lỗi, và việc tôi cần làm thêm
-   (khởi động lại session, API key còn thiếu).
+   (tải lại session, API key còn thiếu).
+```
+
+## Cách 3: máy cá nhân
+
+```bash
+git clone https://github.com/nguyenbatunga5hnue-wq/claude-skills-kit.git ~/claude-skills-kit
+~/claude-skills-kit/install.sh
 ```
 
 ---
