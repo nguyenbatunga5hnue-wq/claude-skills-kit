@@ -23,6 +23,7 @@ Options:
 | `./install.sh --libs ~/my-video` | Also install the npm libraries into that folder |
 | `./install.sh --only custom` | Only the three custom skills (works offline) |
 | `./install.sh --no-plugins` | Skip plugins |
+| `./install.sh --latest` | Newest upstream commits instead of the reviewed pins (unreviewed) |
 
 For cloud sessions you can put `~/claude-skills-kit/install.sh` in the environment's
 setup script so that every new session starts with everything installed.
@@ -39,6 +40,10 @@ Cloning this repo as a project also makes these three available to Claude Code i
 that project folder, because they live in `.claude/skills/`.
 
 ## Third-party skills (fetched by `install.sh` from the original repos)
+
+Each source is pinned to the commit that was reviewed (see `pin_for()` in `install.sh`).
+Skills are instructions for an agent with shell access, so to update: review the upstream
+diff, then bump the SHA. `--latest` skips the pins and prints a warning.
 
 | Source | Skills |
 |---|---|
