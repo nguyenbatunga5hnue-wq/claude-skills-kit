@@ -1,129 +1,169 @@
-# KỊCH BẢN VIDEO: "Câu sau bắt đầu bằng gì?" Cách nối câu theo Theme–Rheme
+# KỊCH BẢN VIDEO (bản 2): "Cô ơi cứu em! Câu sau bắt đầu bằng gì?"
 
-**Thời lượng:** khoảng 2 phút 50 giây
-**Đối tượng:** học sinh đã học 3 cách nối (1. Lặp lại/Paraphrase · 2a/2b/2c. Tham chiếu · 3. Cụ thể hóa)
-**Mục tiêu:** học sinh có một **quy trình suy nghĩ** để tự chọn cách nối, thay vì chỉ thuộc tên các cách.
-**Câu chốt của video:** **Nhìn ĐUÔI → Chọn VIỆC → Viết ĐẦU**
+**Thời lượng:** khoảng 2 phút 45 giây
+**Đối tượng:** học sinh đã học bài cấu trúc liên kết Theme–Rheme
+**Mục tiêu:** ôn nhanh 3 cách nối, sau đó luyện phản xạ chọn đúng chữ mở đầu câu sau
+**Chủ đề ví dụ:** môi trường, giáo dục, công nghệ, đời sống đô thị (không dùng cosmetic surgery)
 
-> Quy ước trên màn hình: phần **Rheme (cuối câu 1)** tô **vàng**, phần **Theme (đầu câu 2)** tô **xanh**, có mũi tên cong nối từ vàng sang xanh.
+> Quy ước trên màn hình: **phần cuối câu 1 (Rheme)** tô **vàng**, **phần đầu câu 2 (Theme)** tô **xanh**, có mũi tên cong nối từ vàng sang xanh. Giữ đúng quy ước này trong toàn bộ video.
 
 ---
 
-## CẢNH 1: MỞ ĐẦU (0:00 – 0:15)
+## CẢNH 1: HOOK, LỜI "KÊU CỨU" (0:00 – 0:15)
 
-**Màn hình:** Một đoạn văn rời rạc 3 câu, chữ hơi mờ. Con trỏ nhấp nháy ở đầu câu thứ 2, kèm dấu "?" thật to.
+**Màn hình:** Giao diện tin nhắn điện thoại. Từng tin nhắn của học sinh hiện lên, có tiếng "ting" mỗi lần.
+
+> 💬 **Học sinh:** Cô ơi cứu em 😭
+> 💬 Em thuộc hết Theme với Rheme rồi
+> 💬 Mà ngồi viết xong câu 1 là em đứng hình luôn
+> 💬 Câu 2 em không biết **bắt đầu bằng chữ gì** cả 🆘
+
+**Lời thoại** (giọng học sinh đọc tin nhắn, sau đó giọng giáo viên):
+> **Học sinh:** "Cô ơi cứu em! Em thuộc lý thuyết rồi, mà viết xong câu một là em đứng hình. Câu hai em không biết bắt đầu bằng chữ gì hết!"
+> **Giáo viên:** "Nếu em cũng đang bí giống bạn này, xem hết video nhé. Chỉ cần 3 phút để em không bao giờ bí chữ mở đầu nữa."
+
+---
+
+## CẢNH 2: NHẮC LẠI CẤU TRÚC (0:15 – 0:30)
+
+**Màn hình:** Hai câu xếp chồng. Phần vàng ở cuối câu 1 trượt xuống thành phần xanh ở đầu câu 2.
+
+```
+Câu 1:   [Theme]  ───────  [ RHEME = thông tin mới ]
+                                     │
+                                     ▼
+Câu 2:   [ THEME = lấy lại Rheme ]  ───────  [Rheme mới]
+```
 
 **Lời thoại:**
-> "Các em đã biết 3 cách nối câu. Nhưng khi tự viết, chắc nhiều em vẫn gặp cảnh này: viết xong câu 1 rồi ngồi nhìn chỗ trống, không biết câu 2 nên **bắt đầu bằng gì**. Trong 3 phút này, cô/thầy chỉ cho các em cách tìm ra chữ đầu tiên đó."
+> "Nhắc nhanh nhé: thông tin mới nằm ở **cuối** câu. Câu sau sẽ **mở đầu bằng chính thông tin đó**, rồi mới thêm ý mới. Vậy câu hỏi là: lấy lại cái đuôi đó bằng cách nào? Có 3 cách."
 
 ---
 
-## CẢNH 2: NGUYÊN TẮC (0:15 – 0:45)
+## CẢNH 3: CÁCH 1, NHẮC LẠI HOẶC PARAPHRASE (0:30 – 0:48)
 
-**Màn hình:** Câu mẫu hiện ra, phần cuối tô vàng:
-*Many young people feel* **anxious about their looks.**
-Mũi tên cong kéo phần vàng xuống đầu câu 2 → **This anxiety** *can affect their studies.*
-Sau đó hiện 3 bước:
+**Màn hình:** Tiêu đề "CÁCH 1: NHẮC LẠI" và ví dụ:
 
-| Bước | Việc cần làm |
-|---|---|
-| 1. Nhìn ĐUÔI | Khoanh phần thông tin mới ở **cuối** câu trước (Rheme) |
-| 2. Chọn VIỆC | Hỏi: mình muốn **nhắc lại**, **gói lại** hay **mở ra** phần đó? |
-| 3. Viết ĐẦU | Đặt phần đó lên **đầu** câu sau (Theme), rồi mới thêm ý mới |
+> Many cities are building more **public parks.**
+> **These green spaces** help residents relax after work.
+
+Bên dưới: *public parks → green spaces*
 
 **Lời thoại:**
-> "Bí quyết là: **ý mới ở cuối câu trước sẽ thành điểm xuất phát của câu sau.** Đừng nghĩ ý mới trước. Hãy làm 3 bước. Một: nhìn đuôi câu trước. Hai: tự hỏi mình muốn nhắc lại, gói lại, hay mở ra cái đuôi đó. Ba: đặt nó lên đầu câu sau, rồi mới viết tiếp."
+> "Cách một: **nhắc lại**. Câu một kết thúc bằng *public parks*. Câu hai bắt đầu bằng chính ý đó nhưng đổi sang từ đồng nghĩa: *These green spaces*. Có thể lặp lại y nguyên một lần, nhưng đổi từ sẽ hay hơn."
 
 ---
 
-## CẢNH 3: BẢNG CHỌN NHANH (0:45 – 1:05)
+## CẢNH 4: CÁCH 2, THIS / SUCH / IT (0:48 – 1:15)
 
-**Màn hình:** Bảng "Đuôi câu trước là gì? → Dùng cách nào?" (giữ trên màn hình đủ lâu để học sinh chụp lại).
+**Màn hình:** Tiêu đề "CÁCH 2: GÓI LẠI". Ba ví dụ hiện lần lượt, mỗi ví dụ có nhãn nhỏ.
 
-| Đuôi câu trước là… | Việc cần làm | Cách | Đầu câu sau |
+**2a. Danh từ hóa**
+> Many students **rely on AI tools** to do their homework.
+> **This reliance** may weaken their thinking skills.
+
+**2b. Danh từ khái quát**
+> More and more people **are working from home.**
+> **This trend** has reduced traffic in big cities.
+
+**2c. Đại từ**
+> Plastic bags **take hundreds of years to break down.**
+> **They** also kill many sea animals.
+
+**Lời thoại:**
+> "Cách hai: **gói lại** bằng *this, such* hoặc đại từ. Nếu đuôi câu là một động từ như *rely*, biến nó thành danh từ: *This reliance*. Nếu đuôi câu là cả một tình huống, gói nó vào một danh từ khái quát: *This trend*. Còn nếu chỉ có một danh từ rõ ràng phía trước, dùng luôn đại từ: *They*."
+
+---
+
+## CẢNH 5: CÁCH 3, CỤ THỂ HÓA (1:15 – 1:30)
+
+**Màn hình:** Tiêu đề "CÁCH 3: MỞ RA". Từ *health problems* "nổ" ra thành 3 thẻ nhỏ.
+
+> Air pollution can cause **serious health problems.**
+> **Asthma, lung cancer and heart disease** are common examples.
+
+**Lời thoại:**
+> "Cách ba: **mở ra**. Khi đuôi câu là một từ khái quát như *health problems*, câu sau mở đầu bằng các ví dụ cụ thể: *Asthma, lung cancer and heart disease*."
+
+---
+
+## CẢNH 6: TÓM TẮT 3 CÁCH (1:30 – 1:40)
+
+**Màn hình:** Bảng tóm tắt, giữ khoảng 5 giây để học sinh chụp lại.
+
+| Đuôi câu trước là… | Việc cần làm | Đầu câu sau |
+|---|---|---|
+| Một danh từ cụ thể | **1. NHẮC LẠI** | từ đồng nghĩa: *These green spaces…* |
+| Một hành động / tình huống | **2. GÓI LẠI** | *This reliance / This trend / They…* |
+| Một từ khái quát | **3. MỞ RA** | ví dụ: *Asthma, lung cancer and…* |
+
+**Lời thoại:**
+> "Tóm lại: nhìn đuôi câu trước, rồi chọn **nhắc lại**, **gói lại**, hoặc **mở ra**. Giờ mình luyện phản xạ nhé!"
+
+---
+
+## CẢNH 7: PRACTICE, 5 GIÂY MỖI CÂU (1:40 – 2:30)
+
+**Cách trình bày mỗi câu (khoảng 10 giây):**
+1. Hiện câu 1 (đuôi tô vàng) và câu 2 còn để trống phần đầu.
+2. Đồng hồ đếm ngược **5 giây**, có tiếng tích tắc.
+3. "Ting!" Hiện đáp án tô xanh, kèm nhãn cách nối. Giữ 3 giây rồi chuyển câu.
+
+**Lời thoại mở đầu:**
+> "Mỗi câu các em có 5 giây. Đoán xem câu hai bắt đầu bằng gì nhé!"
+
+| # | Câu 1 | Câu 2 (để trống phần đầu) | Đáp án hiện sau 5 giây |
 |---|---|---|---|
-| Một **danh từ cụ thể** (*celebrities, social media*) | Nhắc lại | 1 / 2c | *Public figures… / They…* |
-| Một **động từ/tính từ** (*compare, anxious*) | Gói lại | 2a | *This comparison… / This anxiety…* |
-| **Cả một tình huống** | Gói lại | 2b | *This trend / problem / practice…* |
-| Một **từ khái quát** (*health problems, unfair methods*) | Mở ra | 3 | *Infections, scarring and…* |
+| 1 | Many families now own **electric cars.** | _______ produce no exhaust fumes. | **These vehicles** *(Cách 1: nhắc lại)* |
+| 2 | Many teenagers **are addicted to online games.** | _______ can harm their sleep. | **This addiction** *(Cách 2a: danh từ hóa)* |
+| 3 | Some people **throw rubbish in the streets.** | _______ makes our cities dirty. | **This practice** *(Cách 2b: danh từ khái quát)* |
+| 4 | The school library has just bought **200 new books.** | _______ cover many different subjects. | **They** *(Cách 2c: đại từ)* |
+| 5 | Living in a big city has **many advantages.** | _______ are just a few examples. | **Better jobs, good hospitals and modern shopping malls** *(Cách 3: mở ra)* |
+
+**Lời thoại** (giáo viên chỉ đọc đáp án, rất ngắn):
+> Câu 1: "*These vehicles*, nhắc lại *electric cars*."
+> Câu 2: "*This addiction*, gói *addicted* lại."
+> Câu 3: "*This practice*, gói cả hành vi lại."
+> Câu 4: "*They*, chỉ *200 new books*."
+> Câu 5: "Mở *advantages* ra thành ví dụ cụ thể."
+
+---
+
+## CẢNH 8: BÀI LUYỆN TẬP CUỐI, ĐÁP ÁN Ở BÌNH LUẬN (2:30 – 2:45)
+
+**Màn hình:** Đoạn văn rời rạc, chữ hơi "vỡ" ra từng mảnh để thể hiện thiếu liên kết.
+
+> **Viết lại đoạn văn sau cho liền mạch, dùng ít nhất 3 cách nối khác nhau:**
+>
+> *More and more people now work from home. Traffic in big cities has decreased. Workers can save time and money. Some people feel lonely.*
+
+Dòng cuối màn hình: **"👇 Comment bài của em bên dưới. Cô sẽ ghim đáp án mẫu!"**
 
 **Lời thoại:**
-> "Muốn biết nên làm gì, hãy xem cái đuôi là loại từ gì. Nếu là một danh từ cụ thể, ta **nhắc lại** bằng từ đồng nghĩa hoặc đại từ. Nếu là một hành động hay cảm xúc, ta **gói lại** bằng danh từ hóa. Nếu là cả một tình huống, ta **gói lại** bằng danh từ khái quát như *trend*, *problem*. Còn nếu là một từ khái quát, ta **mở ra** bằng ví dụ cụ thể."
+> "Bài cuối dành cho em: viết lại đoạn văn này, dùng ít nhất 3 cách nối. Comment bài làm bên dưới nhé, cô sẽ ghim đáp án mẫu và chữa cho vài bạn. Nhớ: nhìn đuôi, rồi nhắc lại, gói lại hoặc mở ra!"
 
 ---
 
-## CẢNH 4: LÀM MẪU, MỘT CÂU NHIỀU CÁCH NỐI (1:05 – 1:35)
+## BÌNH LUẬN GHIM (đăng sau khi đã có học sinh comment)
 
-**Màn hình:** Câu 1 ở giữa, 3 nhánh tỏa ra lần lượt theo lời thoại.
-
-*Many teenagers* **compare themselves with influencers online.**
-
-- Nhắc lại (1) → **These social media stars** *often post heavily edited photos.*
-- Gói lại (2a) → **Such comparison** *can lower their self-esteem.*
-- Gói lại (2b) → **This trend** *worries many parents and teachers.*
-
-**Lời thoại:**
-> "Thử với câu này. Đuôi câu là *compare themselves with influencers online*. Muốn nói tiếp về influencer thì nhắc lại: *These social media stars…*. Muốn nói về hậu quả của việc so sánh thì gói động từ *compare* thành *Such comparison…*. Muốn nhìn rộng hơn thì gói cả câu thành *This trend…*. **Cùng một câu mà có nhiều hướng đi.** Hướng nào đúng phụ thuộc vào ý các em muốn viết tiếp."
-
----
-
-## CẢNH 5: LUYỆN TẬP 1, BẤM GIỜ 20 GIÂY (1:35 – 2:05)
-
-**Màn hình:** Câu đề, phần đuôi tô vàng. Đồng hồ đếm ngược **20 giây** ở góc, có tiếng tích tắc nhẹ, 3 giây cuối có tiếng "bíp".
-
-*Many students* **stay up late to play video games.**
-**Nhiệm vụ:** Nghĩ ra **ít nhất 2 cách mở đầu** cho câu 2.
-
-**Lời thoại (trước khi đếm, 0:05):**
-> "Đến lượt các em. Nhìn đuôi câu này, nghĩ ra ít nhất 2 cách mở đầu câu sau. Có thể dừng video nếu cần thêm thời gian. Bắt đầu!"
-
-*(20 giây đếm ngược, không lời, chỉ nhạc nền nhẹ)*
-
-**Màn hình đáp án:**
-- Gói lại (2b): **This habit / This practice** *leaves them tired in class.*
-- Nhắc lại (1): **These games** *are designed to keep players online for hours.*
-
-**Lời thoại (đáp án, 0:05):**
-> "Các em có thể gói lại bằng *This habit* hoặc *This practice*, hoặc nhắc lại bằng *These games*. Cách nào cũng đúng, miễn là câu sau bắt đầu từ cái đuôi."
-
----
-
-## CẢNH 6: LUYỆN TẬP 2, NỐI THÀNH CHUỖI, BẤM GIỜ 30 GIÂY (2:05 – 2:40)
-
-**Màn hình:** Câu đề với đuôi tô vàng. Đồng hồ **30 giây**.
-
-*Online learning has* **several drawbacks.**
-**Nhiệm vụ:** Viết **câu 2** (mở ra ý của câu 1), rồi viết **câu 3** nối tiếp đuôi của câu 2.
-
-**Lời thoại (trước khi đếm, 0:05):**
-> "Thử thách khó hơn: nối liền 2 câu. *Drawbacks* là một từ khái quát, vậy câu 2 nên làm gì? Sau đó lặp lại 3 bước cho câu 3. 30 giây, bắt đầu!"
-
-*(30 giây đếm ngược)*
-
-**Màn hình đáp án:** Hiện từng câu, mũi tên vàng → xanh nối liên tiếp như bậc thang.
-
-> Online learning has **several drawbacks.**
-> → **Poor internet connection and lack of interaction** are common examples. *(Cách 3: mở ra)*
-> → **Such problems** can make students lose motivation. *(Cách 2b: gói lại)*
-
-**Lời thoại (đáp án, 0:05):**
-> "*Drawbacks* là từ khái quát nên ta mở ra bằng ví dụ. Rồi lại gói các ví dụ đó thành *Such problems* để đi tiếp. Mở ra rồi gói lại, đoạn văn sẽ nối liền như bậc thang."
-
----
-
-## CẢNH 7: KẾT (2:40 – 2:50)
-
-**Màn hình:** Câu chốt cỡ lớn: **Nhìn ĐUÔI → Chọn VIỆC → Viết ĐẦU**. Bên dưới: "Bài tập tiếp theo: Practice 5 trong phiếu học tập".
-
-**Lời thoại:**
-> "Nhớ nhé: Nhìn đuôi, chọn việc, viết đầu. Bây giờ hãy mở phiếu và làm Practice 5, viết lại đoạn văn về cosmetic surgery bằng chính 3 bước này."
+> 📌 **ĐÁP ÁN THAM KHẢO**
+>
+> More and more people now work from home. **This trend** has helped reduce traffic in big cities. **Remote workers** can also save a lot of time and money. **Travel costs, lunch expenses and hours stuck in traffic** are all cut down. However, **such benefits** come at a price, as many people feel lonely when working alone.
+>
+> **Các cách đã dùng:**
+> • **This trend** → Cách 2b (gói cả tình huống "work from home")
+> • **Remote workers** → Cách 1 (paraphrase "people who work from home")
+> • **Travel costs, lunch expenses and hours stuck in traffic** → Cách 3 (mở ra "time and money")
+> • **such benefits** → Cách 2b (gói lại các lợi ích vừa kể)
+>
+> Bài của em dùng cách khác vẫn đúng, miễn là mỗi câu bắt đầu từ cái đuôi của câu trước 💪
 
 ---
 
 ## GHI CHÚ SẢN XUẤT
 
-- **Tổng lời thoại:** khoảng 380 chữ, đọc tốc độ vừa phải (~150 chữ/phút) mất khoảng 2 phút 20 giây. Cộng 50 giây đếm giờ là khoảng 2 phút 50 giây. Nếu cần cắt xuống dưới 2 phút 30 giây, rút Cảnh 3 còn 10 giây (chỉ hiện bảng, đọc lướt) và giảm Luyện tập 2 xuống 25 giây.
-- **Đồng hồ đếm ngược:** dùng vòng tròn hoặc thanh tiến trình to, dễ thấy trên điện thoại. Ngay dưới đồng hồ ghi "Dừng video nếu cần thêm thời gian ⏸".
-- **Nhất quán màu:** vàng = đuôi câu trước (Rheme), xanh = đầu câu sau (Theme), giữ đúng cho mọi ví dụ để học sinh "thấy" được sự nối.
-- **Lỗi nên nhắc thêm nếu có thời gian (tùy chọn, 10 giây):** dùng *it/they* khi phía trước có 2 danh từ sẽ khiến người đọc không biết đại từ chỉ cái nào. Khi phân vân, hãy dùng *this + danh từ*.
-- **Liên hệ phiếu học tập:** Cảnh 2 và 3 tóm tắt phần lý thuyết. Luyện tập 2 trong video là bước khởi động cho Practice 4 và 5.
+- **Thời lượng:** lời thoại khoảng 330 chữ (khoảng 2 phút 10 giây), cộng 25 giây đếm ngược ở phần Practice, tổng khoảng 2 phút 45 giây.
+- **Hook:** nên thu giọng một học sinh thật đọc tin nhắn, nghe tự nhiên và gần gũi hơn. Có thể dùng hiệu ứng rung điện thoại ở tin nhắn cuối.
+- **Practice:** đồng hồ 5 giây cần to, đặt giữa màn hình. Mỗi đáp án nên dùng cùng một âm thanh "ting" để tạo nhịp. Ghi nhỏ ở góc: "Bấm ⏸ nếu cần thêm thời gian".
+- **Câu 3 trong Practice:** *This habit* cũng được chấp nhận. Nếu muốn, có thể hiện cả hai đáp án.
+- **Bài cuối:** nên ghim đáp án sau vài giờ, để học sinh tự làm trước rồi mới so sánh.
