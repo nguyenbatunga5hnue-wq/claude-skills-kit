@@ -29,7 +29,7 @@ Options:
 | `./install.sh` | All skills to `~/.claude/skills` and all plugins |
 | `./install.sh --project ~/my-video` | Skills only for one project (`~/my-video/.claude/skills`) |
 | `./install.sh --libs ~/my-video` | Also install the npm libraries into that folder |
-| `./install.sh --only custom` | Only the three custom skills (works offline) |
+| `./install.sh --only custom` | Only the four custom skills (works offline) |
 | `./install.sh --no-plugins` | Skip plugins |
 | `./install.sh --latest` | Newest upstream commits instead of the reviewed pins (unreviewed) |
 
@@ -43,8 +43,9 @@ setup script so that every new session starts with everything installed.
 | `teacher-tribute-film` | Phase-gated workflow for a Vietnamese Teachers' Day (20/11) tribute film |
 | `shot-list-generator` | Screenplay → timestamped shot-list CSV, plus a validator and shooting schedule (`scripts/validate_shot_list.py`) |
 | `quality-control` | Screenplay / shot-list / final-video QC with `scripts/qc_video.py` (ffmpeg) and `scripts/check_srt.py` |
+| `ielts-listening-review` | IELTS Listening test PDF + audio → teacher-controlled review deck (per-question clips, subtitles, clue/trap marking, MCQ order badges, scoreboard, offline export) |
 
-Cloning this repo as a project also makes these three available to Claude Code in
+Cloning this repo as a project also makes these four available to Claude Code in
 that project folder, because they live in `.claude/skills/`.
 
 ## Third-party skills (fetched by `install.sh` from the original repos)

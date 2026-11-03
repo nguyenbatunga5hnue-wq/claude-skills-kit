@@ -6,7 +6,7 @@ Repo: https://github.com/nguyenbatunga5hnue-wq/claude-skills-kit (private)
 
 Khi tạo session Claude Code trên web, chọn thêm repo `claude-skills-kit`.
 Hook `.claude/hooks/session-start.sh` tự chạy `install.sh` lúc session khởi động
-(khoảng 20–30 giây lần đầu, gần như tức thì các lần sau) và cài 62 skill + 19 plugin
+(khoảng 20–30 giây lần đầu, gần như tức thì các lần sau) và cài 63 skill + 19 plugin
 vào `~/.claude`, dùng được cho mọi repo khác trong cùng session.
 
 ## Cách 2: dán lời nhắn vào session đang mở
@@ -35,14 +35,15 @@ git clone https://github.com/nguyenbatunga5hnue-wq/claude-skills-kit.git ~/claud
 
 ---
 
-## Danh sách đã cài (62 skill, 19 plugin, 21 thư viện)
+## Danh sách đã cài (63 skill, 19 plugin, 21 thư viện)
 
-### Skill tự tạo (3), nằm trong bộ kit
+### Skill tự tạo (4), nằm trong bộ kit
 | Skill | Dùng khi |
 |---|---|
 | `teacher-tribute-film` | Làm phim tri ân 20/11: brief → kịch bản → visual bible → âm thanh → sản xuất → hậu kỳ |
 | `shot-list-generator` | Biến kịch bản đã duyệt thành shot list CSV có timecode, kèm script kiểm tra và lịch quay |
 | `quality-control` | Kiểm tra kịch bản, shot list và video (loudness, khung đen, phụ đề tiếng Việt, thông số xuất) |
+| `ielts-listening-review` | Từ đề IELTS Listening (PDF + audio) làm slides chữa đề cho giáo viên: audio từng câu, phụ đề, clue, bẫy, đánh số thứ tự trắc nghiệm, bảng điểm nhóm, xuất file offline |
 
 ### Skill bên thứ ba (59), tải từ repo gốc theo commit đã khóa
 | Nguồn | Skill |

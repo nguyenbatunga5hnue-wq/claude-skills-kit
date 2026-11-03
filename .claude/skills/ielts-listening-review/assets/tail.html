@@ -1,0 +1,415 @@
+
+</div></main>
+
+<div id="bar">
+  <button id="prev" aria-label="Slide trước">←</button>
+  <span id="count">1 / 1</span>
+  <button id="next" aria-label="Slide sau">→</button>
+  <select id="jump" aria-label="Đi tới slide"></select>
+  <button data-act="sc-goto" title="Phím B">Bảng điểm (B)</button>
+  <button data-act="sc-mini">Điểm nhanh</button>
+  <button data-act="sc-sfx" class="on">Âm thanh: bật</button>
+  <button id="fs">Toàn màn hình</button>
+  <span id="help">← → slide/bước · Space phát/dừng · Esc dừng đoạn · bấm dòng phụ đề để nghe lại từ đó</span>
+</div>
+
+
+<div id="mini" hidden aria-label="Điểm nhóm"></div>
+<style>
+.board{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:1.4cqi;align-items:end}
+.team{position:relative;display:flex;flex-direction:column;align-items:center;gap:.8cqi;height:100%;justify-content:flex-end}
+.team .col-bar{width:100%;flex:1;min-height:0;display:flex;align-items:flex-end;background:var(--paper);border-radius:12px;overflow:hidden;position:relative}
+.team .fillbar{width:100%;border-radius:12px 12px 0 0;transition:height .7s cubic-bezier(.2,1.3,.4,1);min-height:.6cqi}
+.team .score{position:absolute;left:0;right:0;top:1cqi;text-align:center;font:700 6cqi/1 var(--f-head);color:var(--ink)}
+.team .score.bump{animation:bump .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.team .score{background:transparent;border:0;width:100%;-moz-appearance:textfield;appearance:textfield;padding:0;border-radius:10px;cursor:text}
+.team .score::-webkit-outer-spin-button,.team .score::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.team .score:hover{background:rgba(255,255,255,.5)}
+.team .score:focus{outline:3px solid var(--blue);background:var(--card)}
+.team .nm{font:800 1.6cqi var(--f-body);color:var(--ink);text-align:center;border-radius:8px;padding:.35cqi .6cqi;width:100%;border:1.5px dashed var(--line);background:var(--card)}
+.team .nm:hover{border-color:var(--ink-2)}
+.team .nm:focus{outline:none;border:1.5px solid var(--blue);background:var(--yellow)}
+#scBack{font-size:1.2cqi}
+.team .crown{position:absolute;top:-.4cqi;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-weight:800;font-size:1cqi;letter-spacing:.08em;text-transform:uppercase;border-radius:99px;padding:.15cqi .8cqi;animation:pop .5s both;z-index:2;white-space:nowrap}
+.team .btns{display:flex;gap:.4cqi}
+.team .btns button{font-size:1.3cqi;font-weight:800;border-radius:8px;padding:.35cqi .9cqi;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer}
+.team .btns button.plus{background:var(--ink);color:#fff}
+#mini{position:fixed;right:max(16px, env(safe-area-inset-right, 0px));bottom:calc(56px + env(safe-area-inset-bottom, 0px));z-index:20;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(22,33,58,.18);padding:8px;display:flex;flex-direction:column;gap:4px;min-width:220px}
+#mini[hidden]{display:none}
+#mini .r{display:grid;grid-template-columns:10px 1fr auto auto auto;gap:6px;align-items:center;font:600 14px var(--f-body);padding:3px 4px;border-radius:8px}
+#mini .r.lead{background:var(--yellow)}
+#mini i{display:block;width:10px;height:10px;border-radius:50%}
+#mini b{font:700 18px var(--f-head);min-width:30px;text-align:right}
+#mini b.bump{animation:bump .5s}
+#mini button{font:800 14px var(--f-body);width:28px;height:28px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+#mini button.plus{background:var(--ink);color:#fff;border-color:var(--ink)}
+#bar button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+@media (max-width:760px){.board{grid-template-columns:repeat(2,1fr)}.team .col-bar{min-height:160px}}
+</style>
+<script>
+/* ---------- sound effects (synthesised, no files) ---------- */
+window.SFX=(()=>{
+  let ctx=null,on=true,timers=[];
+  try{on=localStorage.getItem('c19t3:sfx')!=='0'}catch(e){}
+  function C(){if(!ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A()}if(ctx.state==='suspended')ctx.resume();return ctx}
+  function tone(f,dur,{type='sine',vol=.18,at=0,to=null,attack=.005}={}){if(!on)return;const c=C();if(!c)return;const t=c.currentTime+at;
+    const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur+.05)}
+  function noise(dur,{vol=.15,at=0,f=1200,to=null,type='bandpass',q=1}={}){if(!on)return;const c=C();if(!c)return;const t=c.currentTime+at;
+    const n=Math.floor(c.sampleRate*dur),buf=c.createBuffer(1,n,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+    const s=c.createBufferSource();s.buffer=buf;const fl=c.createBiquadFilter();fl.type=type;fl.Q.value=q;fl.frequency.setValueAtTime(f,t);if(to)fl.frequency.exponentialRampToValueAtTime(to,t+dur);
+    const g=c.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+dur*.2);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(fl).connect(g).connect(c.destination);s.start(t)}
+  const S={
+    pop:(k=1)=>{const f=420*Math.pow(1.12,k-1);tone(f,.12,{to:f*1.9,vol:.2})},
+    ding:()=>{tone(1318,.6,{vol:.12});tone(1976,.5,{vol:.07,at:.02})},
+    chime:()=>{[660,880,1320].forEach((f,i)=>tone(f,.35,{vol:.1,at:i*.07}))},
+    whoosh:(up=true)=>noise(.45,{vol:.12,f:up?400:2200,to:up?2400:350,q:.8}),
+    thud:()=>{tone(150,.25,{to:60,vol:.35,type:'sine'});noise(.08,{vol:.08,f:300,type:'lowpass'})},
+    tick:()=>noise(.03,{vol:.1,f:3500,type:'highpass'}),
+    zip:()=>tone(300,.22,{type:'sawtooth',to:1400,vol:.05}),
+    pour:()=>{noise(.7,{vol:.14,f:900,to:500,type:'lowpass'});noise(.5,{vol:.06,f:2500,at:.15,q:3})},
+    splash:()=>{noise(.6,{vol:.2,f:1600,to:300,type:'lowpass'});tone(220,.2,{to:110,vol:.12,at:.05})},
+    grow:()=>tone(260,.6,{to:900,vol:.12,type:'triangle'}),
+    buzz:()=>tone(140,.28,{type:'square',vol:.06}),
+    cheer:()=>{[523,659,784,1047].forEach((f,i)=>tone(f,.25,{vol:.12,at:i*.06,type:'triangle'}))},
+    minus:()=>tone(330,.25,{to:200,vol:.12,type:'triangle'}),
+  };
+  const SC={
+    1:[[.3,'whoosh'],[.4,'pop',1],[.9,'pop',3],[1.5,'pop',5],[2.5,'pop',2],[2.7,'tick'],[2.9,'tick'],[3.1,'pop',2],[3.3,'tick'],[3.5,'tick']],
+    2:[[.9,'whoosh'],[2.2,'pop',2],[3.4,'whoosh'],[4.3,'zip'],[4.8,'ding']],
+    3:[[.3,'whoosh'],[.5,'tick'],[.7,'tick'],[.9,'tick'],[1.1,'tick'],[1.3,'tick'],[2.4,'whoosh'],[2.6,'tick'],[2.8,'tick'],[3.0,'tick'],[3.2,'tick'],[3.8,'ding']],
+    4:[[.3,'pop',1],[.8,'pop',2],[1.3,'pop',3],[1.8,'pop',4],[2.4,'whoosh',false],[3.6,'whoosh'],[3.9,'pop',3],[4.1,'pop',4],[4.3,'pop',5],[4.5,'pop',6],[5,'pop',1],[5.8,'zip'],[6.3,'ding']],
+    5:[[.4,'whoosh']].concat([.7,2.1,3.5].flatMap(s=>Array.from({length:9},(_,i)=>[s+i*.14,'tick']))).concat([[5,'ding']])
+  };
+  function play(name,arg){if(S[name])S[name](arg)}
+  return Object.assign(S,{
+    play,
+    scene(n){timers.forEach(clearTimeout);timers=[];(SC[n]||[]).forEach(([t,nm,a])=>timers.push(setTimeout(()=>play(nm,a),t*1000)))},
+    stop(){timers.forEach(clearTimeout);timers=[]},
+    get on(){return on},
+    toggle(){on=!on;try{localStorage.setItem('c19t3:sfx',on?'1':'0')}catch(e){}if(!on)this.stop();return on}
+  });
+})();
+
+/* ---------- group scoreboard ---------- */
+(function(){
+  const COLORS=['var(--t5)','var(--t2)','var(--green)','var(--t4)','var(--t3)','var(--t1)','#2B8A9E','#7A8699'];
+  let st={groups:[1,2,3,4].map(i=>({name:'Nhóm '+i,score:0}))};
+  try{const v=JSON.parse(localStorage.getItem('c19t3:score'));if(v&&v.groups&&v.groups.length)st=v}catch(e){}
+  const save=()=>{try{localStorage.setItem('c19t3:score',JSON.stringify(st))}catch(e){}};
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function lead(){const m=Math.max(...st.groups.map(g=>g.score));return m>0?m:null}
+  function render(bump){
+    const board=document.getElementById('board'),mini=document.getElementById('mini');
+    const max=Math.max(5,...st.groups.map(g=>g.score)),L=lead();
+    if(board){board.style.setProperty('--n',st.groups.length);
+      board.innerHTML=st.groups.map((g,i)=>`<div class="team">${L!==null&&g.score===L?'<span class="crown">Dẫn đầu</span>':''}
+        <div class="col-bar"><input class="score sc-in${bump===i?' bump':''}" type="number" min="0" inputmode="numeric" value="${g.score}" data-gi="${i}" id="sc-score-${i}" aria-label="Điểm ${esc(g.name)}"><div class="fillbar" style="height:${g.score/max*100}%;background:${COLORS[i%8]}"></div></div>
+        <input class="nm nm-in" type="text" maxlength="24" value="${esc(g.name)}" placeholder="Nhập tên nhóm" data-gi="${i}" id="sc-name-${i}" aria-label="Tên nhóm ${i+1}">
+        <div class="btns"><button data-sc="-1" data-gi="${i}" aria-label="Trừ 1 điểm">−1</button><button class="plus" data-sc="1" data-gi="${i}" aria-label="Cộng 1 điểm">+1</button><button class="plus" data-sc="2" data-gi="${i}" aria-label="Cộng 2 điểm">+2</button></div></div>`).join('')}
+    if(mini){mini.innerHTML=st.groups.map((g,i)=>`<div class="r${L!==null&&g.score===L?' lead':''}"><i style="background:${COLORS[i%8]}"></i><span>${esc(g.name)}</span><b class="${bump===i?'bump':''}">${g.score}</b><button data-sc="-1" data-gi="${i}" aria-label="Trừ 1 điểm ${esc(g.name)}">−</button><button class="plus" data-sc="1" data-gi="${i}" aria-label="Cộng 1 điểm ${esc(g.name)}">+</button></div>`).join('')}
+  }
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('[data-sc]');
+    if(b){const i=+b.dataset.gi,d=+b.dataset.sc;st.groups[i].score=Math.max(0,st.groups[i].score+d);save();render(i);d>0?SFX.cheer():SFX.minus();return}
+    const a=e.target.closest('[data-act^="sc-"]');if(!a)return;
+    const act=a.dataset.act;
+    if(act==='sc-add'&&st.groups.length<8){st.groups.push({name:'Nhóm '+(st.groups.length+1),score:0});SFX.pop(2)}
+    else if(act==='sc-del'&&st.groups.length>2){st.groups.pop();SFX.minus()}
+    else if(act==='sc-reset'){if(a.dataset.sure){st.groups.forEach(g=>g.score=0);delete a.dataset.sure;a.textContent='Về 0';SFX.whoosh(false)}else{a.dataset.sure='1';a.textContent='Bấm lần nữa để đưa về 0';return}}
+    else if(act==='sc-mini'){const m=document.getElementById('mini');m.hidden=!m.hidden;a.classList.toggle('on',!m.hidden)}
+    else if(act==='sc-sfx'){const on=SFX.toggle();a.textContent=on?'Âm thanh: bật':'Âm thanh: tắt';a.classList.toggle('on',on)}
+    save();render();
+  });
+  document.addEventListener('input',e=>{
+    const n=e.target.closest('.nm-in');
+    if(n){const i=+n.dataset.gi;st.groups[i].name=n.value.trim().slice(0,24)||('Nhóm '+(i+1));save();
+      const mini=document.getElementById('mini');const r=mini&&mini.children[i];if(r)r.children[1].textContent=st.groups[i].name;return}
+    const s=e.target.closest('.sc-in');
+    if(s){const i=+s.dataset.gi,v=Math.max(0,Math.min(999,parseInt(s.value,10)||0));st.groups[i].score=v;save();
+      const max=Math.max(5,...st.groups.map(g=>g.score));document.querySelectorAll('#board .fillbar').forEach((f,k)=>f.style.height=(st.groups[k].score/max*100)+'%')}
+  });
+  document.addEventListener('keydown',e=>{if(e.target.closest('.nm-in,.sc-in')&&e.key==='Enter'){e.preventDefault();e.target.blur()}},true);
+  document.addEventListener('focusout',e=>{if(e.target.closest('.nm-in,.sc-in'))setTimeout(()=>{if(!document.activeElement||!document.activeElement.closest('#board'))render()},0)});
+  /* jump to the scoreboard from anywhere, and back */
+  let ret=null;
+  function goScore(){const D=window.DECK;if(!D)return;const idx=D.indexOf('sScore');if(D.cur()===idx){if(ret!=null)D.show(ret);ret=null;return}
+    ret=D.cur();D.show(idx);SFX.whoosh();paintBack()}
+  function paintBack(){const b=document.getElementById('scBack');if(!b)return;const D=window.DECK;
+    if(ret!=null&&D){b.hidden=false;b.textContent='↩ Quay lại slide '+(ret+1)}else b.hidden=true}
+  document.addEventListener('click',e=>{
+    if(e.target.closest('[data-act="sc-goto"]'))goScore();
+    else if(e.target.closest('#scBack')){const D=window.DECK;if(D&&ret!=null){D.show(ret);SFX.whoosh(false)}ret=null;paintBack()}
+  });
+  document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select,[contenteditable]'))return;if((e.key==='b'||e.key==='B')&&!e.ctrlKey&&!e.metaKey){goScore();e.preventDefault()}});
+  window.addEventListener('deck:show',()=>{const D=window.DECK;if(D&&D.cur()!==D.indexOf('sScore')){ret=null}paintBack()});
+  window.addEventListener('DOMContentLoaded',()=>render());
+  render();
+})();
+</script>
+<script>window.PYR_EX={{PYR_EX}};</script>
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const slides=$$('.slide'), audio=$('#audio');
+const fmt=t=>{t=Math.max(0,Math.floor(t));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+const store={get(k,d){try{const v=localStorage.getItem('c19t3:'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+             set(k,v){try{localStorage.setItem('c19t3:'+k,JSON.stringify(v))}catch(e){}}};
+let cur=0, stopAt=null, clipOwner=null, clipFrom=0;
+
+/* ---------- timestamps on subtitle lines ---------- */
+$$('.ln[data-t]').forEach(l=>{const tm=document.createElement('span');tm.className='tm';tm.textContent=fmt(+l.dataset.t);l.prepend(tm);l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-label','Nghe từ '+fmt(+l.dataset.t))});
+
+/* ---------- navigation with build steps ---------- */
+const jump=$('#jump');
+slides.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+(s.dataset.title||'');jump.appendChild(o)});
+jump.onchange=()=>show(+jump.value);
+const STEP={};
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===cur));
+  $('#count').textContent=(cur+1)+' / '+slides.length; jump.value=cur;
+  SFX.stop();const s=slides[cur]; if(s.id&&ENTER[s.id])ENTER[s.id](s);
+  try{history.replaceState(null,'','#s'+(cur+1))}catch(e){}
+  window.dispatchEvent(new Event('deck:show'));
+}
+window.DECK={show:i=>show(i),cur:()=>cur,indexOf:id=>slides.findIndex(s=>s.id===id)};
+function stepOf(s){return +(s.dataset.step||0)}
+function next(){const s=slides[cur],max=+(s.dataset.steps||0);
+  if(max&&stepOf(s)<max){s.dataset.step=stepOf(s)+1;STEP[s.id]&&STEP[s.id](s,stepOf(s));return}
+  show(cur+1)}
+function prev(){const s=slides[cur],max=+(s.dataset.steps||0);
+  if(max&&stepOf(s)>0){s.dataset.step=stepOf(s)-1;STEP[s.id]&&STEP[s.id](s,stepOf(s));return}
+  show(cur-1)}
+$('#prev').onclick=prev; $('#next').onclick=next;
+$('#fs').onclick=()=>{const el=document.documentElement;
+  if(document.fullscreenElement){document.exitFullscreen&&document.exitFullscreen().catch(()=>{})}
+  else if(el.requestFullscreen){el.requestFullscreen().catch(()=>{})}};
+
+/* ---------- audio transport ---------- */
+const seek=$('#seek'), tPlay=$('#tPlay'), clipmark=$('#clipmark'), nowclip=$('#nowclip');
+const speeds=[1,0.9,0.8,1.15];let si=0;
+function setPlayLabel(){tPlay.textContent=audio.paused?'▶ Phát':'❚❚ Dừng';tPlay.classList.toggle('on',!audio.paused)}
+function play(){const p=audio.play();if(p&&p.catch)p.catch(()=>{})}
+function clearClip(){stopAt=null;clipOwner&&clipOwner.classList.remove('live');clipOwner=null;clipmark.hidden=true;nowclip.textContent='';
+  $$('.playing').forEach(l=>l.classList.remove('playing'))}
+function playClip(from,to,owner,label){
+  clearClip();audio.currentTime=from;stopAt=to;clipFrom=from;clipOwner=owner||null;
+  if(clipOwner)clipOwner.classList.add('live');
+  const d=audio.duration||+seek.max;clipmark.style.left=(from/d*100)+'%';clipmark.style.width=((to-from)/d*100)+'%';clipmark.hidden=false;
+  nowclip.textContent=label||'';play();
+}
+tPlay.onclick=()=>{if(audio.paused)play();else audio.pause()};
+$('#tBack').onclick=()=>{audio.currentTime=Math.max(0,audio.currentTime-5)};
+$('#tFwd').onclick=()=>{audio.currentTime=audio.currentTime+5};
+$('#tStop').onclick=()=>{audio.pause();clearClip()};
+$('#tSpd').onclick=e=>{si=(si+1)%speeds.length;audio.playbackRate=speeds[si];e.target.textContent=speeds[si]+'×'};
+seek.oninput=()=>{audio.currentTime=+seek.value};
+audio.addEventListener('loadedmetadata',()=>{seek.max=audio.duration});
+audio.addEventListener('play',setPlayLabel);
+audio.addEventListener('pause',()=>{setPlayLabel();$$('.playing').forEach(l=>l.classList.remove('playing'))});
+audio.addEventListener('timeupdate',()=>{
+  const t=audio.currentTime;
+  if(document.activeElement!==seek)seek.value=t;
+  $('#tnow').textContent=fmt(t)+' / '+fmt(audio.duration||+seek.max);
+  if(stopAt!=null&&t>=stopAt){audio.pause();audio.currentTime=stopAt;clearClip();return}
+  if(audio.paused)return;
+  // subtitle sync on the visible slide
+  $$('.subs, .gf',slides[cur]).forEach(box=>{
+    if(!box.offsetParent)return;
+    const ls=$$('.ln[data-t]',box);let act=null;
+    const end=+(box.dataset.end||1e9);
+    if(t<=end+0.3)ls.forEach(l=>{if(+l.dataset.t<=t+0.05)act=l});
+    ls.forEach(l=>l.classList.toggle('playing',l===act));
+    if(act){const r=act.offsetTop-box.offsetTop;if(r<box.scrollTop||r>box.scrollTop+box.clientHeight-30)box.scrollTop=Math.max(0,r-20)}
+  });
+  // auto numbering of MCQ options
+  const mq=$('.mq.on.auto',slides[cur]);
+  if(mq&&clipOwner===mq)$$('.opt[data-t]',mq).forEach(o=>{if(!o.classList.contains('said')&&+o.dataset.t<=t)sayOpt(o)});
+});
+
+/* ---------- error counters + notes (kept in this browser) ---------- */
+function errKey(el){return 'err:'+el.dataset.id}
+function paintErr(el){const n=store.get(errKey(el),0);const c=$('.errc',el);if(c){$('.num',c).textContent=n;c.classList.toggle('has',n>0)}
+  const tab=$('.tabs button[data-for="'+el.id+'"] .e');if(tab){tab.textContent=n;tab.classList.toggle('has',n>0)}}
+$$('[data-id]').forEach(el=>{paintErr(el);const ta=$('.notein',el);if(ta){ta.value=store.get('note:'+el.dataset.id,'');
+  ta.addEventListener('input',()=>store.set('note:'+el.dataset.id,ta.value))}});
+
+/* ---------- MCQ helpers ---------- */
+function sayOpt(o){if(!o.classList.contains('said'))SFX.pop(+o.dataset.ord||1);o.classList.add('said')}
+function orderStep(mq){const os=$$('.opt',mq).filter(o=>+o.dataset.ord>0&&!o.classList.contains('said')).sort((a,b)=>a.dataset.ord-b.dataset.ord);
+  if(os.length){sayOpt(os[0]);return}
+  $$('.opt.none',mq).forEach(sayOpt)}
+
+/* ---------- click handling ---------- */
+document.addEventListener('click',e=>{
+  const ln=e.target.closest('.ln[data-t]');
+  if(ln&&!e.target.closest('input')){const box=ln.closest('[data-end]');const own=ln.closest('.qrow,.mq');
+    playClip(+ln.dataset.t,box?+box.dataset.end:+ln.dataset.t+30,own,'Từ '+fmt(+ln.dataset.t));return}
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const s=b.closest('.slide'),act=b.dataset.act,row=b.closest('.qrow,.mq');
+  switch(act){
+    case 'step': next();break;
+    case 'clip': playClip(+b.dataset.from,+b.dataset.to,row||null,b.dataset.label||'');break;
+    case 'cc': row.classList.toggle('cc-on');b.classList.toggle('on');SFX.tick();break;
+    case 'clue': row.classList.toggle('clue-on');b.classList.toggle('on');if(row.classList.contains('clue-on'))SFX.chime();break;
+    case 'ans': row.classList.toggle('ans-on');if(row.classList.contains('ans-on'))SFX.ding();$$('[data-act="ans"].b',row).forEach(x=>x.classList.toggle('on',row.classList.contains('ans-on')));break;
+    case 'note': row.classList.toggle('note-on');b.classList.toggle('on');if(row.classList.contains('note-on')){const ta=$('.notein',row);ta&&ta.focus()}break;
+    case 'err+': case 'err-':{const el=b.closest('[data-id]');const n=Math.max(0,store.get(errKey(el),0)+(act==='err+'?1:-1));store.set(errKey(el),n);paintErr(el);act==='err+'?SFX.buzz():SFX.tick();break}
+    case 'all-ans':{const on=!s.classList.contains('all-on');s.classList.toggle('all-on',on);$$('.qrow',s).forEach(r=>{r.classList.toggle('ans-on',on);$$('[data-act="ans"].b',r).forEach(x=>x.classList.toggle('on',on))});b.classList.toggle('on',on);if(on)SFX.ding();break}
+    case 'tab':{$$('.tabs button',s).forEach(x=>x.classList.toggle('on',x===b));$$('.mq',s).forEach(m=>m.classList.toggle('on',m.id===b.dataset.for));SFX.whoosh();break}
+    case 'ord': orderStep(row);break;
+    case 'ord-auto': row.classList.toggle('auto');b.classList.toggle('on');break;
+    case 'ord-reset': $$('.opt',row).forEach(o=>o.classList.remove('said'));break;
+    case 'reveal': s.classList.toggle('revealed');b.classList.toggle('on');if(s.classList.contains('revealed'))SFX.ding();break;
+    case 'round2': s.classList.remove('hideScript');SFX.whoosh();break;
+    case 'round1': s.classList.add('hideScript');break;
+    case 'check': $$('.gf input',s).forEach(inp=>{const ok=inp.dataset.a.split('|').some(a=>a.toLowerCase()===inp.value.trim().toLowerCase());inp.classList.toggle('right',ok);inp.classList.toggle('wrong',!ok&&inp.value.trim()!=='')});$$('.gf input.wrong',s).length?SFX.buzz():SFX.ding();break;
+    case 'fill': $$('.gf input',s).forEach(inp=>{inp.value=inp.dataset.a.split('|')[0];inp.classList.add('right');inp.classList.remove('wrong')});SFX.chime();break;
+    case 'pyr-replay': renderScene(+($('#sPyr').dataset.sel||stepOf($('#sPyr'))||1));break;
+    case 'bk-pour': bkPour();break;
+    case 'bk-grow': bkGrow();break;
+    case 'bk-reset': bkReset();break;
+    case 'err-clear': if(b.dataset.sure){$$('[data-id]').forEach(el=>{store.set(errKey(el),0);paintErr(el)});delete b.dataset.sure;b.textContent='Xoá số đếm';renderErrSum()}else{b.dataset.sure='1';b.textContent='Bấm lần nữa để xoá'}break;
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input,textarea,select,[contenteditable]'))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){next();e.preventDefault()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
+  else if(e.key===' '&&!e.target.closest('button')){if(audio.paused)play();else audio.pause();e.preventDefault()}
+  else if(e.key==='Escape'){audio.pause();clearClip()}
+  else if(e.key==='Enter'&&e.target.classList.contains('ln')){e.target.click()}
+});
+
+/* ---------- pyramid build ---------- */
+const TIERS={
+ 1:{c:'var(--t1)',age:'Trẻ sơ sinh',name:'Nhận biết âm',en:'Trong tiếng Anh: phân biệt <b>fifteen / fifty</b>, <b>ship / sheep</b>; nghe đánh vần <b>S-A-M-P-H-I-R-E</b>; nhận ra âm bị nối, bị nuốt.'},
+ 2:{c:'var(--t2)',age:'1 – 3 tuổi',name:'Nhận diện từ và cụm từ',en:'Tách dòng âm liền mạch thành từ, rồi gom thành cụm quen: <b>go over the bridge</b>, <b>a handful of</b>, <b>run out of</b>.'},
+ 3:{c:'var(--t3)',age:'Cấp 1',name:'Hiểu cả một câu',en:'Hiểu trọn nghĩa một câu và nhận ra cách nói lại đơn giản.'},
+ 4:{c:'var(--t4)',age:'Cấp 2',name:'Hiểu đoạn dài và ghi nhớ',en:'Giữ thông tin qua nhiều câu, theo dõi người nói <b>đổi ý</b>, <b>phủ định</b>. Chìa khoá của Part 2, Part 3.'},
+ 5:{c:'var(--t5)',age:'Cấp 3 – Đại học',name:'Hiểu – nhớ – diễn đạt lại',en:'Ghi chú khi nghe giảng và nhận ra đáp án dù đề viết bằng từ khác hẳn audio (paraphrase).'}
+};
+const d=(s)=>'animation-delay:'+s+'s';
+const X=window.PYR_EX;
+const SCN={
+ 1:()=>`<div class="lbl2 a rise">Tiếng Việt · mẹ gọi, bé nghe</div>
+  <div style="position:relative;display:flex;align-items:center;justify-content:space-between;height:7cqi">
+    <div class="avatar" style="background:#B4532A">Mẹ</div>
+    <span class="bubble" style="--to:4cqi;${d(.3)}">mẹ</span>
+    <span class="bubble" style="--to:12cqi;${d(.9)}">ba</span>
+    <span class="bubble" style="--to:20cqi;${d(1.5)}">bà</span>
+    <div class="avatar" style="background:var(--t1);color:var(--ink)">Bé<span class="ringfx"></span><span class="ringfx" style="animation-delay:.8s"></span></div>
+  </div>
+  <div class="lbl2 a rise" style="${d(2.3)}">Tiếng Anh · cùng chữ, khác trọng âm</div>
+  <div class="stress">
+    <div class="w a pop" style="${d(2.5)}"><div class="bars"><i style="height:40%;background:var(--t2);${d(2.7)}"></i><i style="height:100%;background:var(--t3);${d(2.9)}"></i></div><div class="syl"><span>fif</span><span>TEEN</span></div><b>15</b></div>
+    <div class="w a pop" style="${d(3.1)}"><div class="bars"><i style="height:100%;background:var(--t3);${d(3.3)}"></i><i style="height:40%;background:var(--t2);${d(3.5)}"></i></div><div class="syl"><span>FIF</span><span>ty</span></div><b>50</b></div>
+  </div>`,
+ 2:()=>`<div class="lbl2 a rise">Tiếng Việt · dòng âm liền → cụm từ</div>
+  <div class="stream" style="font-size:2.2cqi;${d(.9)}"><span>đặt</span><span>xuống</span><span style="color:var(--ink-2)">·</span><span>cầm</span><span>lấy</span><span style="color:var(--ink-2)">·</span><span>cười</span><span>đi</span></div>
+  <div class="lbl2 a rise" style="${d(2.2)}">Tiếng Anh · ${X.t2.label}</div>
+  <div class="chunk a rise" style="${d(2.8)}"><div class="stream" style="${d(3.4)}">${X.t2.chunk.split(' ').map(w=>'<span>'+w+'</span>').join('')}</div><span class="ul" style="background:var(--t2);${d(4.3)}"></span></div>
+  <div class="card a rise" style="${d(4.8)}">${X.t2.card}</div>`,
+ 3:()=>{const w=(txt,base)=>txt.split(' ').map((x,i)=>`<span style="--dx:${(i%2?1:-1)*(6+i*2)}cqi;--dy:${(i%3-1)*5}cqi;--r:${(i%2?12:-12)}deg;${d(base+i*.18)}">${x}</span>`).join('');
+  return `<div class="lbl2 a rise">Tiếng Việt · câu ngắn, cơ bản</div>
+  <div class="flyw" style="font-size:2cqi">${w('Con lấy cho mẹ cái cốc trên bàn.',.3)}</div>
+  <div class="lbl2 a rise" style="${d(2.2)}">Tiếng Anh · ${X.t3.label}</div>
+  <div class="flyw">${w(X.t3.sentence,2.4)}</div>
+  <div class="card a rise" style="${d(3.8)}">${X.t3.card}</div>`},
+ 4:()=>`<div class="row" style="gap:2cqi;align-items:flex-start">
+   <div class="col" style="gap:.6cqi;flex:1">
+     <div class="lbl2 a rise">Mẹ dặn đi chợ</div>
+     <div class="memo" style="animation:blur .6s 2.4s forwards, unblur .6s 3.6s forwards">
+       <div class="it a rise" style="${d(.3)}"><span class="ck" style="animation:pop .4s 3.9s both">✓</span>1 cân thịt</div>
+       <div class="it a rise" style="${d(.8)}"><span class="ck" style="animation:pop .4s 4.1s both">✓</span>1 bó rau muống</div>
+       <div class="it a rise" style="${d(1.3)}"><span class="ck" style="animation:pop .4s 4.3s both">✓</span>đậu phụ</div>
+       <div class="it a rise" style="${d(1.8)}"><span class="ck" style="animation:pop .4s 4.5s both">✓</span>hết đậu → lấy trứng</div>
+     </div>
+     <div class="row a rise" style="gap:.6cqi;font-size:1.05cqi;font-weight:800;${d(2.4)}"><span class="pill" style="background:var(--ink);color:#fff">Nghe</span><span class="pill" style="background:var(--ink-2);color:#fff;animation:pop .4s 2.9s both" >Nhớ</span><span class="pill a pop" style="background:var(--t4);color:#fff;${d(3.7)}">Thuật lại</span></div>
+   </div>
+   <div class="col" style="gap:.8cqi;flex:1">
+     <div class="lbl2 a rise" style="${d(4.8)}">Tiếng Anh · ${X.t4.label}</div>
+     <div class="row a rise" style="gap:1cqi;align-items:center;${d(5)}"><span class="chip" style="background:var(--orange-soft);color:var(--orange)">${X.t4.wrong}<span class="st" style="animation:strike .5s 5.8s both;width:0"></span></span><span class="arrowR">→</span><span class="chip a pop" style="background:var(--blue-soft);color:var(--blue);${d(6.3)}">${X.t4.right}</span></div>
+     <div class="card a rise" style="font-size:1.2cqi;${d(6.6)}">${X.t4.card}</div>
+   </div></div>`,
+ 5:()=>`<div class="row" style="gap:1.4cqi;align-items:center">
+   <div class="col" style="gap:.4cqi;align-items:center"><div class="eqz">${Array.from({length:9},(_,i)=>`<i style="animation-delay:${(i*0.11).toFixed(2)}s"></i>`).join('')}</div><span class="lbl2">${X.t5.label}</span></div>
+   <span class="arrowR a rise" style="${d(.3)}">→</span>
+   <div class="nb grow a rise" style="${d(.4)}">
+${X.t5.notes.map((n,i)=>`<span class="ty" style="${d(.7+i*1.4)}">${n}</span>`).join('')}
+   </div></div>
+   <div class="row a rise" style="gap:1cqi;align-items:center;${d(5)}"><span class="card" style="flex:1"><span class="lbl2">Audio</span><br><b>${X.t5.audio}</b></span><span class="arrowR">⇄</span><span class="card" style="flex:1;background:var(--blue-soft)"><span class="lbl2">Đề</span><br><b>${X.t5.test}</b></span></div>`
+};
+function renderScene(n){const t=TIERS[n],sc=$('#scene');$('#sPyr').dataset.sel=n;
+  sc.innerHTML=`<span class="age" style="color:${t.c}">Tầng ${n} · ${t.age}</span><h3>${t.name}</h3><div class="stagebox">${SCN[n]()}</div>`;SFX.scene(n);
+  $$('#pyr .tier').forEach(x=>{x.classList.toggle('sel',+x.dataset.tier===n);x.classList.toggle('dim',+x.dataset.tier!==n&&x.classList.contains('in'))})}
+STEP.sPyr=(s,n)=>{
+  if(n>0)SFX.thud();
+  $$('#pyr .tier').forEach(x=>x.classList.toggle('in',+x.dataset.tier<=n));
+  $$('#tl .node').forEach(x=>x.classList.toggle('on',+x.dataset.n<=n));
+  $('#tlFill').style.width=(n<=1?0:(n-1)/4*92)+'%';
+  if(n>0)renderScene(n);else{$('#scene').innerHTML='<div class="stagebox" style="align-items:center;text-align:center"><h3 style="font-size:2.4cqi">Một đứa trẻ học nghe như thế nào?</h3><p class="sub">Bấm “Tầng tiếp” hoặc phím → để xây từng tầng.</p></div>';$$('#pyr .tier').forEach(x=>x.classList.remove('sel','dim'))}
+};
+$$('#pyr .tier').forEach(t=>t.onclick=()=>{if(t.classList.contains('in'))renderScene(+t.dataset.tier)});
+STEP.sPyr($('#sPyr'),0);
+
+/* ---------- band meter ---------- */
+const BANDS={
+ 1:{b:4.5,lab:'≤ 4.5',c:'var(--t1)',skill:'Phân biệt âm gần nhau (15/50, ship/sheep), nối âm, nuốt âm, đánh vần chữ cái',where:'Part 1: tên riêng đánh vần, số điện thoại, ngày tháng',stuck:'Nghe thấy tiếng nhưng không tách được thành từ.',fix:['Nghe – chép từng chữ cái, con số','Luyện cặp âm tối thiểu (minimal pairs)']},
+ 2:{b:5.25,lab:'5.0 – 5.5',c:'var(--t2)',skill:'Nhận ra từ quen khi nói nhanh; bắt cụm cố định',where:'Part 1, Part 4: điền 1 từ, số, địa điểm',stuck:'Bắt được từ khoá nhưng sai chính tả, sót số.',fix:['Chép chính tả cụm 3–5 từ','Học từ vựng kèm cách đọc, không học mặt chữ']},
+ 3:{b:6,lab:'6.0',c:'var(--t3)',skill:'Hiểu nghĩa trọn một câu, nhận ra paraphrase đơn giản',where:'Part 1 câu khó, Part 2 câu ngắn',stuck:'Hiểu từng câu, hết câu là quên. Kẹt ở trắc nghiệm.',fix:['Dictation cả câu','Shadowing mỗi ngày']},
+ 4:{b:7.25,lab:'7.0 – 7.5',c:'var(--t4)',skill:'Giữ thông tin qua nhiều câu; nhận ra sửa lại, phủ định, đổi ý',where:'Part 2–3 trắc nghiệm, chọn 2, matching',stuck:'Nhớ được, nhưng chưa tự diễn đạt lại. Gặp paraphrase xa là lạc.',fix:['Nghe 1 phút rồi kể lại (retell)','Ghi chú bằng ký hiệu']},
+ 5:{b:8.5,lab:'8.0 +',c:'var(--t5)',skill:'Nghe, nhớ, rồi ghi chú và nói/viết lại bằng lời của mình',where:'Part 4 bài giảng; mọi câu paraphrase xa',stuck:'Đích đến: nghe như sinh viên ghi bài.',fix:['Nghe bài giảng, viết tóm tắt 100 từ','So với transcript, tìm ý bị sót']}
+};
+const sc=$('#scale');[4,5,6,7,8,9].forEach(v=>{const t=document.createElement('div');t.className='tick';t.style.bottom=((v-4)/5*100)+'%';t.textContent=v.toFixed(1);sc.appendChild(t)});
+function meter(n){const B=BANDS[n];
+  $$('#mpyr .tier').forEach(x=>{x.classList.toggle('sel',+x.dataset.mt===n);x.classList.toggle('dim',+x.dataset.mt!==n)});
+  SFX.grow();setTimeout(()=>SFX.ding(),700);$('#mk').style.bottom=((B.b-4)/5*100)+'%';$('#mkTxt').textContent=B.lab;
+  $('#minfo').innerHTML=`<div class="fadein col" style="gap:.8cqi"><span class="pill" style="background:${B.c};color:${n==1?'var(--ink)':'#fff'};align-self:flex-start">Tầng ${n} · Band ${B.lab}</span>
+   <div><div class="k">Kỹ năng</div>${B.skill}</div><div><div class="k">Trong đề IELTS</div>${B.where}</div>
+   <div style="background:var(--red-soft);border-radius:8px;padding:.7cqi 1cqi"><div class="k" style="color:var(--red)">Kẹt ở tầng này nghĩa là</div><b>${B.stuck}</b></div>
+   <div><div class="k">Cần tập</div><ul>${B.fix.map(x=>'<li>'+x+'</li>').join('')}</ul></div></div>`}
+STEP.sMeter=(s,n)=>{if(n>0)meter(n);else{$$('#mpyr .tier').forEach(x=>x.classList.remove('sel','dim'));$('#mk').style.bottom='0';$('#mkTxt').textContent='?'}};
+$$('#mpyr .tier').forEach(t=>t.onclick=()=>{const s=$('#sMeter');s.dataset.step=t.dataset.mt;meter(+t.dataset.mt)});
+
+/* ---------- stuck cards ---------- */
+STEP.sStuck=(s,n)=>(n&&SFX.pop(n+1),$$('.stuck .c',s)).forEach((c,i)=>c.classList.toggle('in',i<n));
+
+/* ---------- bucket ---------- */
+const G=372,CX=260;let C=3,W=0,LOST=0;
+function bkDraw(){const h=52*C,top=G-h;
+  const p=`M${CX-150} ${top} L${CX-118} ${G} L${CX+118} ${G} L${CX+150} ${top}`;
+  $('#bkBody').setAttribute('d',p);$('#bkClipPath').setAttribute('d',p+' Z');
+  const wh=h*Math.min(W,C)/C;const r=$('#bkWater');r.setAttribute('y',G-wh);r.setAttribute('height',wh);
+  $('#bkStream').setAttribute('d',`M330 ${Math.max(10,top-150)} C 320 ${top-100}, 300 ${top-60}, 290 ${top+10}`);
+  $('#bkCap').textContent=C;$('#bkW').textContent=Math.min(W,C);$('#bkLost').textContent=LOST}
+function msg(t){const m=$('#bkMsg');m.textContent=t;m.classList.remove('fadein');void m.offsetWidth;m.classList.add('fadein')}
+function bkPour(){SFX.pour();const st=$('#bkStream');
+  st.animate([{strokeDashoffset:200,opacity:1},{strokeDashoffset:0,opacity:1},{strokeDashoffset:-200,opacity:0}],{duration:900,easing:'ease-in'});
+  setTimeout(()=>{
+    if(W>=C){LOST++;bkOverflow();msg(LOST>=2?'Thùng đầy rồi. Luyện thêm bao nhiêu đề nước cũng tràn ra ngoài: điểm không lên.':'Tràn! Thùng chỉ chứa được '+C+' gáo.')}
+    else{W++;msg(W>=C?'Đầy thùng. Muốn chứa thêm, phải làm thùng to ra.':'Luyện đề giúp đổ đầy thùng. Còn chỗ cho '+(C-W)+' gáo nữa.')}
+    bkDraw()},550)}
+function bkOverflow(){SFX.splash();const h=52*C,top=G-h,g=$('#bkDrips');
+  [[-1,CX-150],[1,CX+150]].forEach(([s,x])=>{const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M${x} ${top} C ${x+s*18} ${top+10}, ${x+s*24} ${top+h*.5}, ${x+s*30} ${G}`);p.setAttribute('fill','none');p.setAttribute('stroke','#3E6FD8');p.setAttribute('stroke-width','7');p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-dasharray','400');g.appendChild(p);
+    p.animate([{strokeDashoffset:400,opacity:1},{strokeDashoffset:0,opacity:1},{strokeDashoffset:0,opacity:0}],{duration:1400,easing:'ease-in',fill:'forwards'});
+    const e=document.createElementNS('http://www.w3.org/2000/svg','ellipse');e.setAttribute('cx',x+s*34);e.setAttribute('cy',G+4);e.setAttribute('rx',10+LOST*6);e.setAttribute('ry',4+LOST);e.setAttribute('fill','#3E6FD8');e.setAttribute('opacity','.3');g.appendChild(e);
+    setTimeout(()=>p.remove(),1500)})}
+function bkGrow(){SFX.grow();if(C>=6){msg('Thùng đã rất lớn. Giờ luyện đề sẽ thấy điểm lên rõ.');return}C++;bkDraw();msg('Nghe nguồn thật làm thùng to ra: giờ chứa được '+C+' gáo. Luyện đề tiếp sẽ không bị tràn.')}
+function bkReset(){C=3;W=0;LOST=0;$('#bkDrips').innerHTML='';bkDraw();msg('Thùng nhỏ chỉ chứa được 3 gáo. Thử múc liên tục xem chuyện gì xảy ra.')}
+bkDraw();
+
+/* ---------- error summary ---------- */
+function renderErrSum(){const box=$('#errsum');if(!box)return;box.innerHTML='';
+  $$('[data-id]').forEach(el=>{const n=store.get(errKey(el),0),note=store.get('note:'+el.dataset.id,'');if(!n&&!note)return;
+    const c=document.createElement('div');c.className='c';c.innerHTML='<b></b><span class="n"></span><span></span>';
+    c.children[0].textContent='Câu '+el.dataset.id;c.children[1].textContent=n?n+' bạn sai':'';c.children[2].textContent=note;box.appendChild(c)});
+  if(!box.children.length)box.innerHTML='<p class="sub" style="grid-column:1/-1">Chưa ghi lỗi nào. Trong lúc chữa, bấm + ở mỗi câu để đếm số bạn sai, và ✎ để ghi lại lỗi.</p>'}
+const ENTER={sErr:renderErrSum};
+
+const m=/^#s(\d+)$/.exec(location.hash);show(m?+m[1]-1:0);
+})();
+</script>

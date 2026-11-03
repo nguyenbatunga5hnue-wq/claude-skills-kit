@@ -1,0 +1,128 @@
+<div id="top">
+  <span class="lbl">Audio cả đề</span>
+  <button id="tPlay" aria-label="Phát hoặc dừng">▶ Phát</button>
+  <button id="tBack" aria-label="Lùi 5 giây">−5s</button>
+  <button id="tFwd" aria-label="Tới 5 giây">+5s</button>
+  <div id="seekwrap"><input id="seek" type="range" min="0" max="{{DUR}}" step="0.1" value="0" aria-label="Vị trí audio"><span id="clipmark" hidden></span></div>
+  <span id="tnow">0:00 / {{DURTXT}}</span>
+  <span id="nowclip"></span>
+  <button id="tSpd" aria-label="Tốc độ phát">1×</button>
+  <button id="tStop" aria-label="Dừng đoạn đang phát">■ Dừng</button>
+</div>
+<audio id="audio" preload="auto" src="{{AUDIO}}"></audio>
+
+<main id="viewport"><div id="stage">
+
+{{COVER}}
+<section class="slide" id="sScore" data-title="Bảng điểm nhóm">
+ <div class="hdr"><h2>Bảng điểm nhóm</h2>
+  <div class="tools"><button class="b pri" id="scBack" hidden>↩ Quay lại</button><button class="b sm" data-act="sc-add">+ Thêm nhóm</button><button class="b sm" data-act="sc-del">− Bớt nhóm</button><button class="b sm" data-act="sc-reset">Về 0</button></div></div>
+ <div class="board" id="board"></div>
+</section>
+<!-- PYRAMID BUILD -->
+<section class="slide" id="sPyr" data-title="Kim tự tháp" data-steps="5">
+  <div class="hdr">
+    <div class="col" style="gap:.3cqi"><h2>Kim tự tháp kỹ năng nghe</h2></div>
+    <div class="tools"><button class="b" data-act="pyr-replay">↻ Chạy lại hiệu ứng</button><button class="b pri" data-act="step">Tầng tiếp ▸</button></div>
+  </div>
+  <div class="pbuild">
+    <div class="col" style="justify-content:flex-end">
+      <div class="pyr" id="pyr">
+        <button class="tier top" style="width:38%;background:var(--t5)" data-tier="5">5<small>Diễn đạt lại</small></button>
+        <button class="tier" style="width:54%;background:var(--t4)" data-tier="4">4 · Đoạn dài + nhớ</button>
+        <button class="tier" style="width:70%;background:var(--t3)" data-tier="3">3 · Hiểu cả câu</button>
+        <button class="tier" style="width:85%;background:var(--t2)" data-tier="2">2 · Từ &amp; cụm từ</button>
+        <button class="tier" style="width:100%;background:var(--t1);color:var(--ink)" data-tier="1">1 · Nhận biết âm</button>
+      </div>
+    </div>
+    <div class="scene" id="scene" aria-live="polite"></div>
+  </div>
+  <div class="timeline" id="tl">
+    <div class="track"></div><div class="fill" id="tlFill"></div>
+    <div class="node" data-n="1"><span class="dot" style="background:var(--t1)">1</span>Sơ sinh</div>
+    <div class="node" data-n="2"><span class="dot" style="background:var(--t2)">2</span>1–3 tuổi</div>
+    <div class="node" data-n="3"><span class="dot" style="background:var(--t3)">3</span>Cấp 1</div>
+    <div class="node" data-n="4"><span class="dot" style="background:var(--t4)">4</span>Cấp 2</div>
+    <div class="node" data-n="5"><span class="dot" style="background:var(--t5)">5</span>Cấp 3 – Đại học</div>
+  </div>
+</section>
+
+<!-- BAND METER -->
+<section class="slide" id="sMeter" data-title="Tầng → Band" data-steps="5">
+  <div class="hdr">
+    <div class="col" style="gap:.3cqi"><h2>Tầng nào, band nấy</h2></div>
+    <div class="tools"><button class="b pri" data-act="step">Tầng tiếp ▸</button></div>
+  </div>
+  <div class="meter">
+    <div class="pyr mini" id="mpyr" style="justify-content:center">
+      <button class="tier top" style="width:38%;background:var(--t5)" data-mt="5">5<small>Diễn đạt</small></button>
+      <button class="tier" style="width:54%;background:var(--t4)" data-mt="4">4 · Đoạn + nhớ</button>
+      <button class="tier" style="width:70%;background:var(--t3)" data-mt="3">3 · Câu</button>
+      <button class="tier" style="width:85%;background:var(--t2)" data-mt="2">2 · Từ, cụm</button>
+      <button class="tier" style="width:100%;background:var(--t1);color:var(--ink)" data-mt="1">1 · Âm</button>
+    </div>
+    <div class="scale" id="scale"><div class="mk" id="mk" style="bottom:0"><span id="mkTxt">?</span></div></div>
+    <div class="minfo" id="minfo"><p class="sub" style="font-size:1.6cqi">Bấm vào một tầng, hoặc “Tầng tiếp”, để xem band tương ứng và triệu chứng “kẹt” ở tầng đó.</p></div>
+  </div>
+</section>
+
+<!-- STUCK -->
+<section class="slide" id="sStuck" data-title="Mình kẹt ở đâu?" data-steps="3">
+  <div class="hdr">
+    <div class="col" style="gap:.3cqi"><h2>Mình đang kẹt ở đâu?</h2></div>
+    <div class="tools"><button class="b pri" data-act="step">Hiện tiếp ▸</button></div>
+  </div>
+  <div class="stuck grow">
+    <div class="c">
+      <span class="pill" style="background:var(--t3);color:#fff;align-self:flex-start">Kẹt band 5–6</span>
+      <div class="big">Hiểu, nhưng không nhớ</div>
+      <p class="sub">Nghe câu nào hiểu câu đó. Đến câu trắc nghiệm thì không biết A, B hay C được nhắc trước, cái nào bị bác bỏ.</p>
+      <h3>Cần tập</h3>
+      <ul><li>Chép chính tả từng câu (dictation)</li><li>Shadowing 1–2 phút mỗi ngày</li><li>Nghe 1 câu, dừng, nói lại nguyên câu</li></ul>
+    </div>
+    <div class="c">
+      <span class="pill" style="background:var(--t4);color:#fff;align-self:flex-start">Kẹt band 6.5–7</span>
+      <div class="big">Nhớ, nhưng chưa nói lại được</div>
+      <p class="sub">Kể lại được ý chính, nhưng chỉ nhắc đúng từ trong bài. Gặp paraphrase xa là lạc.</p>
+      <h3>Cần tập</h3>
+      <ul><li>Nghe 30–60 giây, tắt audio, kể lại (retell)</li><li>Tìm 3 cách nói khác cho mỗi ý</li><li>Ghi chú bằng ký hiệu, không chép nguyên câu</li></ul>
+    </div>
+    <div class="c">
+      <span class="pill" style="background:var(--t5);color:#fff;align-self:flex-start">Hướng tới 8+</span>
+      <div class="big">Nghe – nhớ – viết lại</div>
+      <p class="sub">Nghe bài giảng 5 phút và tóm tắt lại bằng lời của mình, giữ đúng trình tự và quan hệ nhân quả.</p>
+      <h3>Cần tập</h3>
+      <ul><li>Nghe TED/podcast, ghi chú, viết tóm tắt 100 từ</li><li>So bản tóm tắt với transcript</li><li>Luyện Part 4 không nhìn đề lần đầu</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- BUCKET -->
+<section class="slide" id="sBucket" data-title="Cái thùng nước">
+  <div class="hdr">
+    <div class="col" style="gap:.3cqi"><h2>Cái thùng và gáo nước</h2></div>
+  </div>
+  <div class="bucket">
+    <svg id="bkSvg" viewBox="0 0 520 400" role="img" aria-label="Cái thùng nước: chiều cao là dung tích nghe, mực nước là số đề đã luyện">
+      <defs><clipPath id="bkClip"><path id="bkClipPath" d=""/></clipPath></defs>
+      <path id="bkStream" d="M300 20 C 290 60, 270 90, 262 130" fill="none" stroke="#3E6FD8" stroke-width="10" stroke-linecap="round" stroke-dasharray="200" stroke-dashoffset="200" opacity="0"/>
+      <g clip-path="url(#bkClip)"><rect id="bkWater" x="100" y="370" width="320" height="0" fill="#3E6FD8" opacity=".85" style="transition:y .7s ease, height .7s ease"/></g>
+      <path id="bkBody" d="" fill="none" stroke="#16213A" stroke-width="5" stroke-linejoin="round" style="transition:d .7s ease"/>
+      <g id="bkDrips"></g>
+      <line x1="40" y1="372" x2="480" y2="372" stroke="#D9DFE7" stroke-width="3"/>
+    </svg>
+    <div class="col" style="gap:1.1cqi">
+      <div class="stat"><div><span class="lbl2">Dung tích thùng</span><b id="bkCap">3</b></div><div><span class="lbl2">Đề đã luyện</span><b id="bkW">0</b></div><div><span class="lbl2">Nước tràn mất</span><b id="bkLost" style="color:var(--orange)">0</b></div></div>
+      <div class="row" style="gap:.7cqi;flex-wrap:wrap">
+        <button class="b" data-act="bk-pour" style="border-color:var(--orange);color:var(--orange)">Luyện 1 đề (múc 1 gáo)</button>
+        <button class="b" data-act="bk-grow" style="border-color:var(--blue);color:var(--blue)">Nghe nguồn thật 1 tuần</button>
+        <button class="b sm" data-act="bk-reset">Làm lại</button>
+      </div>
+      <p id="bkMsg" class="fadein">Thùng nhỏ chỉ chứa được 3 gáo. Thử múc liên tục xem chuyện gì xảy ra.</p>
+      <div class="vs col" style="gap:.8cqi">
+        <div class="c" style="background:var(--blue-soft)"><b style="color:var(--blue)">Cái thùng = nghe nguồn thật</b><span>Podcast, YouTube, tin tức, phim, bài giảng. Tăng vốn âm, vốn từ, tốc độ xử lý, trí nhớ.</span></div>
+        <div class="c" style="background:var(--orange-soft)"><b style="color:var(--orange)">Gáo nước = luyện đề</b><span>Kỹ năng làm bài: đọc trước câu hỏi, nhận bẫy, quản lý thời gian.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
