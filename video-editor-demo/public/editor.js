@@ -246,7 +246,7 @@ function renderList(force) {
   listKey = key;
   $('list').innerHTML = items.map(({ o, label }) => {
     const tr = trackOf(o);
-    return `<li data-id="${o.id}" class="${o.id === sel ? 'sel' : ''}"><span class="dot" style="background:${tr.color}"></span>
+    return `<li data-id="${esc(o.id)}" class="${o.id === sel ? 'sel' : ''}"><span class="dot" style="background:${esc(tr.color)}"></span>
       <span class="txt">${esc(label)}<span class="meta">${tr.name} · ${fmt(o.start)}${o.edited ? ' · đã chỉnh' : ''}</span></span>
       <span class="flag">${o.note ? '✎' : ''}</span></li>`;
   }).join('') || '<li class="empty">Không có thành phần nào.</li>';
@@ -261,8 +261,8 @@ $('tabs').onclick = (e) => {
 $('search').oninput = () => renderList(true);
 
 // ---------- inspector ----------
-const opt = (obj, cur) => Object.entries(obj).map(([k, v]) => `<option value="${k}" ${k === cur ? 'selected' : ''}>${esc(typeof v === 'string' ? v : v.label)}</option>`).join('');
-const num = (name, label, val, step = 0.1) => `<label class="field"><span>${label}</span><input type="number" step="${step}" data-k="${name}" value="${val}"></label>`;
+const opt = (obj, cur) => Object.entries(obj).map(([k, v]) => `<option value="${esc(k)}" ${k === cur ? 'selected' : ''}>${esc(typeof v === 'string' ? v : v.label)}</option>`).join('');
+const num = (name, label, val, step = 0.1) => `<label class="field"><span>${label}</span><input type="number" step="${step}" data-k="${name}" value="${esc(val)}"></label>`;
 const noteBox = (o, what) => `
   <div class="note-box">
     ${o.reply ? `<div class="reply"><b>✳ Claude:</b> ${esc(o.reply)}</div>` : ''}
@@ -367,8 +367,8 @@ function renderTimeline() {
   $('tracks').innerHTML = TRACKS.map((tr) => {
     const items = tr.id === 'canh' ? P.scenes : P.layers.filter((l) => l.track === tr.id);
     return `<div class="track" data-track="${tr.id}">${items.map((o) => `
-      <div class="clip ${o.id === sel ? 'sel' : ''}" data-id="${o.id}" title="${esc(isScene(o) ? o.name : plain(o.text))}"
-        style="left:${o.start * k}px;width:${Math.max(4, (o.end - o.start) * k - 2)}px;background:${tr.color}${o.edited ? '' : 'cc'}">
+      <div class="clip ${o.id === sel ? 'sel' : ''}" data-id="${esc(o.id)}" title="${esc(isScene(o) ? o.name : plain(o.text))}"
+        style="left:${o.start * k}px;width:${Math.max(4, (o.end - o.start) * k - 2)}px;background:${esc(tr.color)}${o.edited ? '' : 'cc'}">
         <span class="h l"></span>${esc(isScene(o) ? o.name : plain(o.text))}${o.note ? '<span class="badge">✎</span>' : ''}<span class="h r"></span>
       </div>`).join('')}</div>`;
   }).join('');

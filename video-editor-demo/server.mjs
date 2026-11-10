@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 4321);
+const HOST = process.env.HOST || '127.0.0.1'; // local only by default
 const PROJECT = path.join(ROOT, 'project.json');
 const HISTORY = path.join(ROOT, 'history');
 const OUT = path.join(ROOT, 'out');
@@ -49,9 +50,10 @@ function serveFile(req, res, file) {
     const type = TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream';
     const range = req.headers.range;
     if (range) {
-      const m = /bytes=(\d*)-(\d*)/.exec(range);
-      const start = m[1] ? Number(m[1]) : 0;
-      const end = m[2] ? Number(m[2]) : st.size - 1;
+      const m = /^bytes=(\d*)-(\d*)$/.exec(range);
+      const start = m && m[1] ? Number(m[1]) : 0;
+      const end = Math.min(m && m[2] ? Number(m[2]) : st.size - 1, st.size - 1);
+      if (!m || start > end) { res.writeHead(416, { 'content-range': `bytes */${st.size}` }); return res.end(); }
       res.writeHead(206, {
         'content-type': type, 'accept-ranges': 'bytes', 'content-length': end - start + 1,
         'content-range': `bytes ${start}-${end}/${st.size}`,
@@ -66,7 +68,7 @@ function serveFile(req, res, file) {
 
 function safeJoin(base, rel) {
   const p = path.normalize(path.join(base, rel));
-  return p.startsWith(base) ? p : null;
+  return p === base || p.startsWith(base + path.sep) ? p : null;
 }
 
 function startExport() {
@@ -88,9 +90,27 @@ function startExport() {
   });
 }
 
+// Reject cross-site writes (a page on another origin POSTing to localhost).
+function sameOrigin(req) {
+  const o = req.headers.origin;
+  if (!o) return true;
+  try { return new URL(o).host === req.headers.host; } catch { return false; }
+}
+const ID = /^[A-Za-z0-9_-]{1,40}$/;
+function validProject(d) {
+  const fin = (v) => typeof v === 'number' && Number.isFinite(v);
+  if (!d || !Array.isArray(d.scenes) || !Array.isArray(d.layers) || !d.scenes.length) return false;
+  if (!d.source || typeof d.source.file !== 'string' || !/^media\/[A-Za-z0-9._-]+$/.test(d.source.file)) return false;
+  const sceneOk = (s) => ID.test(s.id) && [s.start, s.end, s.srcIn].every(fin) && Array.isArray(s.zoom) && s.zoom.every(fin) && Array.isArray(s.focus) && s.focus.every(fin);
+  const layerOk = (l) => ID.test(l.id) && ID.test(l.track) && ID.test(l.style) && ID.test(l.anim) && typeof l.text === 'string' && [l.start, l.end, l.x, l.y, l.size].every(fin);
+  return d.scenes.every(sceneOk) && d.layers.every(layerOk);
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
-  const p = decodeURIComponent(url.pathname);
+  let p;
+  try { p = decodeURIComponent(url.pathname); } catch { return send(res, 400, { error: 'bad path' }); }
+  if (req.method !== 'GET' && req.method !== 'HEAD' && !sameOrigin(req)) return send(res, 403, { error: 'cross-origin' });
   try {
     if (p === '/api/project' && req.method === 'GET') {
       const st = fs.statSync(PROJECT);
@@ -101,7 +121,7 @@ const server = http.createServer(async (req, res) => {
     if (p === '/api/project' && req.method === 'PUT') {
       const body = await readBody(req);
       const data = JSON.parse(body); // validate
-      if (!Array.isArray(data.scenes) || !Array.isArray(data.layers)) return send(res, 400, { error: 'bad project' });
+      if (!validProject(data)) return send(res, 400, { error: 'bad project' });
       const text = JSON.stringify(data, null, 2) + '\n';
       fs.writeFileSync(path.join(HISTORY, `${stamp()}.json`), fs.readFileSync(PROJECT)); // keep previous version
       fs.writeFileSync(PROJECT, text);
@@ -128,4 +148,4 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, '0.0.0.0', () => console.log(`Editor: http://localhost:${PORT}`));
+server.listen(PORT, HOST, () => console.log(`Editor: http://localhost:${PORT}`));
