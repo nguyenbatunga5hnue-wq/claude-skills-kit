@@ -1,0 +1,16 @@
+{
+  "name": "video-editor-demo",
+  "version": "1.0.0",
+  "description": "Editor video có layer, cùng làm với Claude",
+  "scripts": {
+    "start": "node server.mjs",
+    "export": "node scripts/render.mjs",
+    "notes": "node scripts/notes.mjs",
+    "media": "bash scripts/prepare-media.sh"
+  },
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "^5.3.0"
+  },
+  "private": true,
+  "type": "module"
+}

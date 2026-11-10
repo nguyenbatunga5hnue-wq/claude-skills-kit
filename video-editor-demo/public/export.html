@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Export</title>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>html,body{margin:0;background:#000}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script type="module">
+  // Used only by scripts/render.mjs: draws frame t with the shared renderer,
+  // reading the source frame from pre-extracted JPEGs (exact, no seeking).
+  import { drawFrame, srcTimeAt, duration, loadFonts, FPS } from '/render.js';
+  const ctx = document.getElementById('c').getContext('2d');
+  let project = null, maxFrame = 1;
+  const cache = new Map();
+  function frameImg(i) {
+    if (cache.has(i)) return cache.get(i);
+    const pr = new Promise((ok, bad) => {
+      const img = new Image();
+      img.onload = () => ok(img);
+      img.onerror = bad;
+      img.src = `/media/frames/${String(i).padStart(5, '0')}.jpg`;
+    });
+    cache.set(i, pr);
+    if (cache.size > 90) cache.delete(cache.keys().next().value);
+    return pr;
+  }
+  window.setup = async (count) => {
+    await loadFonts();
+    project = await (await fetch('/api/project')).json();
+    maxFrame = count;
+    return duration(project);
+  };
+  window.renderAt = async (t) => {
+    const idx = Math.min(maxFrame, Math.max(1, Math.round(srcTimeAt(project, t) * FPS) + 1));
+    const img = await frameImg(idx);
+    frameImg(idx + 1); frameImg(idx + 2); // prefetch
+    drawFrame(ctx, project, t, img);
+    return ctx.canvas.toDataURL('image/jpeg', 0.92);
+  };
+</script>
+</body>
+</html>

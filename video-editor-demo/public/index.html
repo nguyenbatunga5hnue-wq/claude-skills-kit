@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lớp học Editor</title>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/editor.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">✳</span> Lớp học Editor <span class="ver">1.0</span></div>
+  <div class="pname" id="pname"></div>
+  <div class="spacer"></div>
+  <span class="status" id="status"></span>
+  <select id="history" title="Lịch sử các lần lưu"><option value="">Lịch sử…</option></select>
+  <button id="undo" title="Hoàn tác (Ctrl+Z)">↶ Hoàn tác</button>
+  <button id="save" class="ghost" title="Lưu (Ctrl+S)">Lưu</button>
+  <button id="export" class="primary">Xuất video</button>
+</header>
+
+<main class="work">
+  <aside class="left panel">
+    <div class="tabs" id="tabs">
+      <button data-f="here" class="on">Tại đây</button>
+      <button data-f="all">Tất cả</button>
+      <button data-f="note">Có ghi chú</button>
+      <button data-f="edited">Đã chỉnh</button>
+    </div>
+    <input id="search" placeholder="Tìm chữ…">
+    <ul id="list" class="list"></ul>
+  </aside>
+
+  <section class="stage">
+    <div class="canvas-wrap" id="wrap">
+      <canvas id="view" width="1080" height="1920"></canvas>
+      <canvas id="ui" width="1080" height="1920"></canvas>
+    </div>
+    <div class="controls">
+      <button id="play" class="round" title="Phát / dừng (Space)">▶</button>
+      <span class="time" id="time">0:00.00</span>
+      <button id="add" class="add">+ Thêm chữ</button>
+      <label class="chk"><input type="checkbox" id="safe"> Vùng an toàn</label>
+      <span class="hint">Space phát · ← → từng khung · kéo chữ để di chuyển, kéo góc để phóng to</span>
+    </div>
+  </section>
+
+  <aside class="right panel" id="inspector"></aside>
+</main>
+
+<section class="timeline">
+  <div class="tl-head">
+    <b>Timeline</b> <span id="tlinfo"></span>
+    <div class="spacer"></div>
+    <label>Thu phóng <input type="range" id="zoom" min="8" max="80" value="22"></label>
+  </div>
+  <div class="tl-body">
+    <div class="tl-labels" id="tllabels"></div>
+    <div class="tl-scroll" id="tlscroll">
+      <div class="tl-inner" id="tlinner">
+        <div class="ruler" id="ruler"></div>
+        <div id="tracks"></div>
+        <div class="playhead" id="playhead"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+<video id="video" playsinline preload="auto" crossorigin="anonymous">
+  <source src="/media/proxy.mp4" type="video/mp4">
+  <source src="/media/proxy.webm" type="video/webm">
+</video>
+<script type="module" src="/editor.js"></script>
+</body>
+</html>
