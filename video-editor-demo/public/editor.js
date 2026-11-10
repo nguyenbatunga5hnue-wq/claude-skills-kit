@@ -44,7 +44,7 @@ async function load() {
   renderAll();
 }
 async function save() {
-  const r = await fetch('/api/project', { method: 'PUT', body: JSON.stringify(P) });
+  const r = await fetch('/api/project', { method: 'PUT', headers: { 'x-editor': '1' }, body: JSON.stringify(P) });
   if (!r.ok) return toast('Lưu thất bại');
   version = (await r.json()).version;
   dirty = false;
@@ -451,7 +451,7 @@ $('history').onchange = async (e) => {
 };
 $('export').onclick = async () => {
   if (dirty) await save();
-  let job = await (await fetch('/api/export', { method: 'POST' })).json();
+  let job = await (await fetch('/api/export', { method: 'POST', headers: { 'x-editor': '1' } })).json();
   const btn = $('export');
   btn.disabled = true;
   while (job.state === 'running') {

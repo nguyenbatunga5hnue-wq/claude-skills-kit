@@ -22,6 +22,8 @@ npm run notes                                       # in mọi ghi chú cho Clau
 
 Cần: Node 18+, ffmpeg, Playwright + Chromium (để xuất).
 
+Server chỉ nhận yêu cầu tới `localhost`/`127.0.0.1`. Nếu mở qua tên miền khác (proxy xem trước, máy khác trong mạng), chạy với `HOST=0.0.0.0 ALLOWED_HOSTS=ten-mien:cong npm start`.
+
 ## Cấu trúc `project.json`
 
 | Trường | Ý nghĩa |

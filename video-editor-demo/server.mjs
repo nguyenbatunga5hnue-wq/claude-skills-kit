@@ -90,11 +90,17 @@ function startExport() {
   });
 }
 
-// Reject cross-site writes (a page on another origin POSTing to localhost).
+// Only answer requests addressed to this machine by a local name (blocks DNS
+// rebinding), and require a custom header on writes (blocks cross-site forms).
+// Extra host names (e.g. a preview proxy) can be added with ALLOWED_HOSTS=a,b.
+const ALLOWED = new Set(['localhost', '127.0.0.1', '[::1]', ...(process.env.ALLOWED_HOSTS || '').split(',').filter(Boolean)]
+  .map((h) => (h.includes(':') && !h.startsWith('[') ? h : `${h}:${PORT}`)));
+const hostOk = (h) => !!h && ALLOWED.has(h);
 function sameOrigin(req) {
+  if (req.headers['x-editor'] !== '1') return false;
   const o = req.headers.origin;
   if (!o) return true;
-  try { return new URL(o).host === req.headers.host; } catch { return false; }
+  try { return hostOk(new URL(o).host); } catch { return false; }
 }
 const ID = /^[A-Za-z0-9_-]{1,40}$/;
 function validProject(d) {
@@ -110,6 +116,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   let p;
   try { p = decodeURIComponent(url.pathname); } catch { return send(res, 400, { error: 'bad path' }); }
+  if (!hostOk(req.headers.host)) return send(res, 421, { error: 'host not allowed' });
   if (req.method !== 'GET' && req.method !== 'HEAD' && !sameOrigin(req)) return send(res, 403, { error: 'cross-origin' });
   try {
     if (p === '/api/project' && req.method === 'GET') {
