@@ -1,0 +1,17 @@
+{
+  "name": "giu-lua-film",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render:demo": "remotion render src/index.ts Demo ../export/giu-lua-demo.mp4",
+    "render:photo": "remotion render src/index.ts Photo ../export/lop-thanh-anh.mp4"
+  },
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "@fontsource/dancing-script": "^5.3.0",
+    "@remotion/cli": "4.0.539",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "4.0.539"
+  }
+}

@@ -28,22 +28,21 @@ L1 "Nhà mình có ba thế hệ đứng lớp." · L2 "Bà truyền cho mẹ. M
 ## Tài liệu trong repo (đọc khi cần)
 - film/04-visual-bible.md: màu (vàng be, bóng nâu ấm, sáng trắng kem, bão hoà thấp), font Be Vietnam Pro Light (phụ đề) và Dancing Script (chữ viết tay), cách dùng âm thanh.
 - film/05-kich-ban-quay.md: danh sách cảnh cần quay (mã 1A–8E), lời dẫn, lịch quay.
-- film/demo/: dự án Remotion 4 (node_modules là symlink sang /home/user/motion-stack, đã có @fontsource/be-vietnam-pro và dancing-script). src/Demo.tsx là animatic minh hoạ cả phim, src/Photo.tsx là hiệu ứng "đóng băng thành ảnh in". Dùng lại cách làm của chúng.
+- film/demo/: dự án Remotion 4 (cài bằng `npm install` trong film/demo; có @fontsource/be-vietnam-pro và dancing-script). src/Demo.tsx là animatic minh hoạ cả phim, src/Photo.tsx là hiệu ứng "đóng băng thành ảnh in". Dùng lại cách làm của chúng.
 
 ## Tư liệu thật hiện có
-- Thư mục upload: /root/.claude/uploads/686e990c-43ec-5237-8fc3-375425ca5bfc/
-  - 80b11cb8-1K6VHRTSS_3P52PM.mov: mẹ đứng lớp cấp 1 (854x480, 30 fps, SDR, 23,5 giây)
-  - 326b28fa-IMG_0765.mov: thầy chữa bài bằng bút dạ đỏ ở lớp IELTS (1080p60, HDR HLG, 7 giây)
-  - 061399ee-IMG_0790.mov: cả lớp IELTS cầm nến (1080p60, HDR HLG, 6,9 giây)
-  - c5f712f5-…Piano_Tutorial….mp3: nhạc "Người gieo mầm xanh" bản piano (có rủi ro bản quyền khi đăng Facebook)
-  - 298a2b1b-v14044….mp4: clip TikTok tham chiếu màu. KHÔNG dùng hình của clip này trong phim.
-- film/export/me-va-con-noi.mp4 (22,1 giây, đã nối mẹ → thầy), film/export/lop-thanh-anh.mp4 (11,4 giây, nến → ảnh in), film/export/giu-lua-demo-nhac.mp4 (animatic cả phim có nhạc).
-- CHƯA có: cảnh bà, ảnh bà thời trẻ, đèn dầu, cảnh đêm, hộp quà, video lời chúc, giọng dẫn. Phần nào thiếu thì làm **placeholder** rõ ràng (thẻ chữ ghi mã cảnh, ví dụ "1A · tay bà lật album") để thay sau, KHÔNG bịa hình người thật.
+Tất cả tư liệu gốc đặt trong `film/media/` (thư mục này không đưa lên git). Tên chuẩn:
+  - `film/media/me-day-lop.mov`: mẹ đứng lớp cấp 1 (854x480, 30 fps, SDR, 23,5 giây)
+  - `film/media/thay-chua-bai.mov`: thầy chữa bài bằng bút dạ đỏ ở lớp IELTS (1080p60, HDR HLG, 7 giây)
+  - `film/media/lop-cam-nen.mov`: cả lớp IELTS cầm nến (1080p60, HDR HLG, 6,9 giây)
+  - `film/media/nhac-nguoi-gieo-mam-xanh.mp3`: nhạc "Người gieo mầm xanh" bản piano (có rủi ro bản quyền khi đăng Facebook)
+  - Tư liệu mới người dùng thêm vào (video kỷ niệm, lời chúc, cảnh bà...) cũng nằm trong `film/media/`. Xem danh sách thực tế bằng `ls film/media`.
+- Bản dựng đã có (tạo lại được bằng script, xem film/HANDOFF.md): `film/export/me-va-con-noi.mp4` (22,1 giây, đã nối mẹ → thầy, mờ chuyển 15,0–16,0 giây), `film/export/lop-thanh-anh.mp4` (11,4 giây, nến → ảnh in), `film/export/giu-lua-demo.mp4` (animatic cả phim).
+- Có thể CHƯA có: cảnh bà, ảnh bà thời trẻ, đèn dầu, cảnh đêm, hộp quà, video lời chúc, giọng dẫn. Phần nào thiếu thì làm **placeholder** rõ ràng (thẻ chữ ghi mã cảnh, ví dụ "1A · tay bà lật album") để thay sau, KHÔNG bịa hình người thật.
 
 ## Kỹ thuật
 - Clip iPhone HDR HLG → SDR: `zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p`
-- Render Remotion: `npx remotion render src/index.ts <Id> <out.mp4> --browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell --concurrency=3 --log=error`. Ảnh tĩnh: `npx remotion still ... --frame=N`.
-- Mạng bị chặn với hầu hết trang ngoài (pixabay, youtube, remotion.dev...). npm registry dùng được.
+- Render Remotion (chạy trong film/demo, sau `npm install`): `npx remotion render src/index.ts <Id> <out.mp4> --concurrency=3 --log=error`. Ảnh tĩnh: `npx remotion still ... --frame=N`. Xem trước: `npm run studio`.
 - Đầu ra 1920x1080, 30 fps.
 
 ## Quy tắc làm việc chung
