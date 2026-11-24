@@ -1,2 +1,3 @@
 # ProRes 4444 alpha layers are ~340MB, too large for git
 04-lop-trong-suot-MOV/
+*.zip
